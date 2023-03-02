@@ -64,7 +64,7 @@ public:
     {
         dst<<"( Return";
         dst<<getValue();
-        dst<<";";
+        dst<<";)";
     }
 };
 
