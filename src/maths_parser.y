@@ -22,12 +22,17 @@
 
 %type <expr> EXPR TERM UNARY FACTOR
 %type <number> T_NUMBER
-%type <string> T_VARIABLE T_LOG T_EXP T_SQRT
+%type <string> T_IDENTIFIER T_LOG T_EXP T_SQRT
 
-%token T_TIMES T_DIVIDE T_PLUS T_MINUS T_EXPONENT
-%token T_LBRACKET T_RBRACKET
+%token T_TIMES T_DIVIDE T_PLUS T_MINUS T_EXPONENT T_EQUALS
+%token T_LOGAND T_LOGOR T_NOTEQUAL 
+%token T_LBRACKET T_RBRACKET T_RCURBRACKET T_LCURBRACKET T_SEMICOLON
+%token T_IF T_ELSE T_WHILE T_RETURN
+%token T_INT T_VOID
 %token T_LOG T_EXP T_SQRT
-%token T_NUMBER T_VARIABLE
+%token T_NUMBER T_IDENTIFIER
+
+
 
 %start ROOT
 
@@ -35,14 +40,14 @@
 
 ROOT : EXPR { g_root = $1; }
 
-EXPR : TERM           { $$ = $1; }
-     | EXPR T_PLUS TERM { $$ = new AddOperator($1, $3); }
-     | EXPR T_MINUS TERM { $$ = new SubOperator($1, $3); }
+EXPR : TERM           { $$ = $1;}
+     | EXPR T_PLUS TERM { $$ = new AddOperator($1, $3);}
+     | EXPR T_MINUS TERM { $$ = new SubOperator($1, $3);}
      ;
 
-TERM : UNARY          { $$ = $1; }
-     | TERM T_TIMES UNARY {$$ = new MulOperator($1, $3); }
-     | TERM T_DIVIDE UNARY {$$ = new DivOperator($1, $3); }
+TERM : UNARY          { $$ = $1;}
+     | TERM T_TIMES UNARY {$$ = new MulOperator($1, $3);}
+     | TERM T_DIVIDE UNARY {$$ = new DivOperator($1, $3);}
      ;
 
 UNARY : FACTOR        { $$ = $1; }
@@ -50,7 +55,7 @@ UNARY : FACTOR        { $$ = $1; }
       ;
 
 FACTOR : T_NUMBER     { $$ = new Number( $1 ); }
-       | T_VARIABLE   { $$ = new Variable( *$1 ); }
+       | T_IDENTIFIER   { $$ = new Variable( *$1 ); }
        | T_LBRACKET EXPR T_RBRACKET { $$ = $2; }
        | FACTOR T_EXPONENT UNARY {$$ = new ExpOperator($1, $3);}
        | T_LOG T_LBRACKET EXPR T_RBRACKET {$$ = new LogFunction($3); }

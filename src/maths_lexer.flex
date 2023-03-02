@@ -18,7 +18,7 @@ L               [a-zA-Z_]
 [-]             { return T_MINUS; }
 [=]             { return T_EQUALS; }
 (&&)            { return T_LOGAND; }
-(||)            { return T_LOGOR; }
+(\|\|)          { return T_LOGOR; }
 (!=)            { return T_NOTEQUAL; }
 
 [(]             { return T_LBRACKET; }
@@ -41,7 +41,7 @@ void            { return T_VOID; }
 
 
 {L}({L}|{D})*   { yylval.string=new std::string(yytext); return T_IDENTIFIER; }
-[D]+([.][D]*)? { yylval.number=strtod(yytext, 0); return T_NUMBER; }
+{D}+([.]{D}*)? { yylval.number=strtod(yytext, 0); return T_NUMBER; }
 
 [ \t\r\n]+		{;}
 
