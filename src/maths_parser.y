@@ -40,28 +40,28 @@ ROOT : EXTERNAL_DECLARATION { g_root = $1; }
 
 
 EXTERNAL_DECLARATION
-	: FUNCTION_DEFINITION  {$$ = $1;}
+	: FUNCTION_DEFINITION  { $$ = $1; }
 	;
 
 FUNCTION_DEFINITION
-	: TYPE_SPECIFIER DECLARATOR COMPOUND_STATEMENT {$$ = new Function_Definition($1, $2, $3);}
+	: TYPE_SPECIFIER DECLARATOR COMPOUND_STATEMENT { $$ = new Function_Definition($1, $2, $3); }
 	;
 
 TYPE_SPECIFIER
-	: T_INT {$$ = new Int($1);}
+	: T_INT { $$ = new Int(*$1); }
 	;
 
 DECLARATOR 
-	: T_IDENTIFIER      {$$ = new Identifier($1);}
-    | DECLARATOR T_LBRACKET T_RBRACKET {$$ = $1;}
+	: T_IDENTIFIER      { $$ = new Identifier( $1); }
+    | DECLARATOR T_LBRACKET T_RBRACKET { $$ = $1; }
 	;
 
 COMPOUND_STATEMENT
-	: T_LCURBRACKET STATEMENT T_RCURBRACKET  {$$ = $2;}
+	: T_LCURBRACKET STATEMENT T_RCURBRACKET  { $$ = $2; }
 	;
 
 STATEMENT
-    : T_RETURN T_NUMBER T_SEMICOLON {$$ = new Statement($2);}
+    : T_RETURN T_NUMBER T_SEMICOLON { $$ = new Statement($2); }
     ;
 /* EXPR : TERM           { $$ = $1;}
      | EXPR T_PLUS TERM { $$ = new AddOperator($1, $3);}
