@@ -10,11 +10,12 @@ private:
     ExpressionPtr Type;
     ExpressionPtr Declarator;
     ExpressionPtr Compound_Statement;
-protected:
+
+public:
     Function_Definition(ExpressionPtr _Type, ExpressionPtr _Declarator, ExpressionPtr _Compound_Statement)
         : Type(_Type), Declarator(_Declarator), Compound_Statement(_Compound_Statement)
     {};
-public:
+
     virtual ~Function_Definition()
     {
         delete Type;
@@ -47,22 +48,22 @@ class Statement
     : public Expression
 {
 private:
-    ExpressionPtr Value;
+    double Value;
 
-protected:
-    Statement(ExpressionPtr _value)
+public:
+    Statement(double _value)
         : Value(_value)
     {};
-public:
-    virtual ~Statement()
+
+    double getValue() const 
     {
-        delete Value;
+        return Value;
     }
 
     virtual void print(std::ostream &dst) const override
     {
         dst<<"( Return";
-        Value->print(dst);
+        dst<<getValue();
         dst<<";";
     }
 };
