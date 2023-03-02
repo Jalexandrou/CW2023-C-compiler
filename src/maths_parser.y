@@ -78,7 +78,7 @@ UNARY : FACTOR        { $$ = $1; }
       ;
 
 FACTOR : T_NUMBER     { $$ = new Number( $1 ); }
-       | T_IDENTIFIER   { $$ = new Variable( *$1 ); }
+       | T_IDENTIFIER   { $$ = new Identifier( *$1 ); }
        | T_LBRACKET EXPR T_RBRACKET { $$ = $2; }
        | FACTOR T_EXPONENT UNARY {$$ = new ExpOperator($1, $3);}
        | T_LOG T_LBRACKET EXPR T_RBRACKET {$$ = new LogFunction($3); }

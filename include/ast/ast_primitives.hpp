@@ -4,13 +4,13 @@
 #include <string>
 #include <iostream>
 
-class Variable
+class Identifier
     : public Expression
 {
 private:
     std::string id;
 public:
-    Variable(const std::string &_id)
+    Identifier(const std::string &_id)
         : id(_id)
     {}
 
@@ -58,6 +58,5 @@ public:
         return value;
     }
 };
-
 
 #endif
