@@ -52,8 +52,8 @@ TYPE_SPECIFIER
 	;
 
 DECLARATOR 
-	: T_IDENTIFIER      { $$ = new Identifier(*$1); }
-    | DECLARATOR T_LBRACKET T_RBRACKET { $$ = $1; }
+	: DECLARATOR T_LBRACKET T_RBRACKET { $$ = $1; }
+    | T_IDENTIFIER      { $$ = new Identifier(*$1); }
 	;
 
 COMPOUND_STATEMENT
