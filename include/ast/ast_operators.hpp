@@ -174,4 +174,135 @@ public:
 };
 
 
+class AssignOperator: public Operator {
+    protected:
+    virtual const char *getOpcode() const override {
+        return "=";
+    }
+    public:
+    AssignOperator(ExpressionPtr _left, ExpressionPtr _right)
+        : Operator(_left, _right)
+    {}
+
+};
+
+class MulAssignOperator: public Operator {
+    protected:
+    virtual const char *getOpcode() const override {
+        return "*=";
+    }
+    public:
+    MulAssignOperator(ExpressionPtr _left, ExpressionPtr _right)
+        : Operator(_left, _right)
+    {}
+
+};
+
+class DivAssignOperator: public Operator {
+    protected:
+    virtual const char *getOpcode() const override {
+        return "/=";
+    }
+    public:
+    DivAssignOperator(ExpressionPtr _left, ExpressionPtr _right)
+        : Operator(_left, _right)
+    {}
+
+};
+
+class ModAssignOperator: public Operator {
+    protected:
+    virtual const char *getOpcode() const override {
+        return "%=";
+    }
+    public:
+    ModAssignOperator(ExpressionPtr _left, ExpressionPtr _right)
+        : Operator(_left, _right)
+    {}
+
+};
+
+class AddAssignOperator: public Operator {
+    protected:
+    virtual const char *getOpcode() const override {
+        return "+=";
+    }
+    public:
+    AddAssignOperator(ExpressionPtr _left, ExpressionPtr _right)
+        : Operator(_left, _right)
+    {}
+
+};
+
+class SubAssignOperator: public Operator {
+    protected:
+    virtual const char *getOpcode() const override {
+        return "-=";
+    }
+    public:
+    SubAssignOperator(ExpressionPtr _left, ExpressionPtr _right)
+        : Operator(_left, _right)
+    {}
+
+};
+
+class LeftAssignOperator: public Operator {
+    protected:
+    virtual const char *getOpcode() const override {
+        return "<<=";
+    }
+    public:
+    LeftAssignOperator(ExpressionPtr _left, ExpressionPtr _right)
+        : Operator(_left, _right)
+    {}
+
+};
+
+class RightAssignOperator: public Operator {
+    protected:
+    virtual const char *getOpcode() const override {
+        return ">>=";
+    }
+    public:
+    RightAssignOperator(ExpressionPtr _left, ExpressionPtr _right)
+        : Operator(_left, _right)
+    {}
+
+};
+
+class AndAssignOperator: public Operator {
+    protected:
+    virtual const char *getOpcode() const override {
+        return "&=";
+    }
+    public:
+    AndAssignOperator(ExpressionPtr _left, ExpressionPtr _right)
+        : Operator(_left, _right)
+    {}
+
+};
+
+class XorAssignOperator: public Operator {
+    protected:
+    virtual const char *getOpcode() const override {
+        return "^=";
+    }
+    public:
+    XorAssignOperator(ExpressionPtr _left, ExpressionPtr _right)
+        : Operator(_left, _right)
+    {}
+
+};
+
+class OrAssignOperator: public Operator {
+    protected:
+    virtual const char *getOpcode() const override {
+        return "|=";
+    }
+    public:
+    OrAssignOperator(ExpressionPtr _left, ExpressionPtr _right)
+        : Operator(_left, _right)
+    {}
+
+};
 #endif

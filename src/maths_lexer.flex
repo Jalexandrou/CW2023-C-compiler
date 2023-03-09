@@ -17,7 +17,20 @@ L               [a-zA-Z_]
 [\^]            { return T_EXPONENT; }
 [\/]            { return T_DIVIDE; }
 [-]             { return T_MINUS; }
+
 [=]             { return T_ASSIGN; }
+(\*=)           { return T_MUL_ASSIGN; }
+(\/=)           { return T_DIV_ASSIGN; }
+(\%=)           { return T_MOD_ASSIGN; }
+(\+=)           { return T_ADD_ASSIGN; }
+(\-=)           { return T_SUB_ASSIGN; }
+(\-=)           { return T_SUB_ASSIGN; }
+(\<\<=)         { return T_LEFT_ASSIGN; }
+(\>\>=)         { return T_RIGHT_ASSIGN; }
+(\&=)           { return T_ADD_ASSIGN; }
+(\^=)           { return T_XOR_ASSIGN; }
+(\|=)           { return T_OR_ASSIGN; }
+
 (&&)            { return T_LOGAND; }
 (\|\|)          { return T_LOGOR; }
 (!=)            { return T_NOTEQUAL; }
