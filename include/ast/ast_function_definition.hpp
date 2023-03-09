@@ -62,7 +62,7 @@ public:
 
     virtual void print(std::ostream &dst) const override
     {
-        dst<<"( Return ";
+        dst<<"( return ";
         Value->print(dst);
         dst<<";)";
     }

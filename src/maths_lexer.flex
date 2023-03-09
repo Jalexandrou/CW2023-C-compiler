@@ -11,7 +11,8 @@ D               [0-9]
 L               [a-zA-Z_]
 %%
 
-[*]             { return T_STAR; }
+[\*]            { return T_STAR; }
+[%]             { return T_MOD; }
 [+]             { return T_PLUS; }
 [\^]            { return T_EXPONENT; }
 [\/]            { return T_DIVIDE; }

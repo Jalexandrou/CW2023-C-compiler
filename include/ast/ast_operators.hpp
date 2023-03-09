@@ -130,6 +130,27 @@ public:
     }
 };
 
+class ModOperator
+    : public Operator
+{
+protected:
+    virtual const char *getOpcode() const override
+    { return "%"; }
+public:
+    ModOperator(ExpressionPtr _left, ExpressionPtr _right)
+        : Operator(_left, _right)
+    {}
+
+    virtual double evaluate(
+        const std::map<std::string,double> &bindings
+    ) const override
+    {
+        double vl=getLeft()->evaluate(bindings);
+        double vr=getRight()->evaluate(bindings);
+        return fmod(vl,vr);
+    }
+};
+
 class ExpOperator
     : public Operator
 {
