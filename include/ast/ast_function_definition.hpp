@@ -38,9 +38,9 @@ public:
         Type->print(dst);
         dst<<" ";
         Declarator->print(dst);
-        dst<<" ";
+        dst<<" { ";
         Compound_Statement->print(dst);
-        dst<<" )";
+        dst<<" } )";
     }
 };
 
