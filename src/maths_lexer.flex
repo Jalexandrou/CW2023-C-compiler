@@ -11,15 +11,16 @@ D               [0-9]
 L               [a-zA-Z_]
 %%
 
-[*]             { return T_TIMES; }
+[*]             { return T_STAR; }
 [+]             { return T_PLUS; }
 [\^]            { return T_EXPONENT; }
 [\/]            { return T_DIVIDE; }
 [-]             { return T_MINUS; }
-[=]             { return T_EQUALS; }
+[=]             { return T_ASSIGN; }
 (&&)            { return T_LOGAND; }
 (\|\|)          { return T_LOGOR; }
 (!=)            { return T_NOTEQUAL; }
+(==)            { return T_EQUALS; }
 
 [(]             { return T_LBRACKET; }
 [)]             { return T_RBRACKET; }

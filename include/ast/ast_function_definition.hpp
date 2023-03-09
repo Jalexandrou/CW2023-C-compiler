@@ -48,22 +48,22 @@ class Statement
     : public Expression
 {
 private:
-    double Value;
+    ExpressionPtr Value;
 
 public:
-    Statement(double _value)
+    Statement(ExpressionPtr _value)
         : Value(_value)
     {};
 
-    double getValue() const 
+    ExpressionPtr getValue() const 
     {
         return Value;
     }
 
     virtual void print(std::ostream &dst) const override
     {
-        dst<<"( Return";
-        dst<<getValue();
+        dst<<"( Return ";
+        Value->print(dst);
         dst<<";)";
     }
 };
