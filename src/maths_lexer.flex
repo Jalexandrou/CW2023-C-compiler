@@ -27,7 +27,7 @@ L               [a-zA-Z_]
 (\-=)           { return T_SUB_ASSIGN; }
 (\<\<=)         { return T_LEFT_ASSIGN; }
 (\>\>=)         { return T_RIGHT_ASSIGN; }
-(\&=)           { return T_ADD_ASSIGN; }
+(\&=)           { return T_AND_ASSIGN; }
 (\^=)           { return T_XOR_ASSIGN; }
 (\|=)           { return T_OR_ASSIGN; }
 
