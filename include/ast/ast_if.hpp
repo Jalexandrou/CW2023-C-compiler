@@ -66,10 +66,10 @@ public:
         dst << "{";
         compoundStatement->print(dst);
         dst << "} ";
-        dst << "else";
+        dst << "else ";
         dst << " { ";
         elseCompoundStatement->print(dst);
-        dst << "} ";
+        dst << " } ";
     }
 };
 
