@@ -222,7 +222,7 @@ CONSTANT_EXPRESSION
 
 DECLARATION
 	: DECLARATION_SPECIFIERS T_SEMICOLON									{ $$ = $1; }
-	| DECLARATION_SPECIFIERS INIT_DECLARATOR_LIST T_SEMICOLON				//one or more declarators with or without values int x, y=7, z;
+	| DECLARATION_SPECIFIERS INIT_DECLARATOR_LIST T_SEMICOLON				{ $$ = new Declaration($1, $2); }
 	;
 
 DECLARATION_SPECIFIERS
@@ -417,7 +417,7 @@ COMPOUND_STATEMENT
 
 DECLARATION_LIST
 	: DECLARATION															{ $$ = $1; }
-	| DECLARATION_LIST DECLARATION                                          { $$ = new Declaration_list($1, $2); }
+	| DECLARATION_LIST DECLARATION                                          { $$ = new Declaration_list($1, $2); } //one or more declarators with or without values int x, y=7, z;
 	;
 
 STATEMENT_LIST
