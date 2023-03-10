@@ -31,64 +31,86 @@ public:
     }
 };
 
-class JumpStatement
+class JumpExpressionStatement
     : public Expression
 {
 private:
     ExpressionPtr expr;
 
 protected:
-    JumpStatement(const ExpressionPtr _expr)
+    JumpExpressionStatement(const ExpressionPtr _expr)
         : expr(_expr)
     {}
 
 public:
 
-    virtual ~JumpStatement()
+    virtual ~JumpExpressionStatement()
     {
         delete expr;
     }
 
+    virtual const char *getStatement() const=0;
+
     virtual void print(std::ostream &dst) const override
     {
         dst<<"( ";
+        dst << getStatement();
+        dst << " ";
         expr->print(dst);
-        dst<<" )";
+        dst<<"; )";
+    }
+};
+
+class JumpStatement: public Expression
+{
+public:
+
+    virtual ~JumpStatement()
+    {}
+
+    virtual const char *getStatement() const=0;
+
+    virtual void print(std::ostream &dst) const override
+    {
+        dst<<"( ";
+        dst << getStatement();
+        dst<<"; )";
     }
 };
 
 
-class ReturnStatement 
-    : public JumpStatement
+
+class ReturnExpressionStatement 
+    : public JumpExpressionStatement
 {
 public:
-    ReturnStatement(const ExpressionPtr _Statement)
-        : JumpStatement(_Statement)
+    ReturnExpressionStatement(const ExpressionPtr _Statement)
+        : JumpExpressionStatement(_Statement)
     {}
 
-    ReturnStatement()
-        : JumpStatement(NULL)
-    {}
+    virtual const char *getStatement() const override
+    { return "return"; }
 };
 
-class BreakStatement
-    : public JumpStatement
-
+class ReturnStatement: public JumpStatement
 {
 public:
-    BreakStatement()
-        : JumpStatement(NULL)
-    {}
+    virtual const char *getStatement() const override
+    { return "return"; }
 };
 
-class ContinueStatement
-    : public JumpStatement
-
+class BreakStatement: public JumpStatement
 {
 public:
-    ContinueStatement()
-        : JumpStatement(NULL)
-    {}
+    virtual const char *getStatement() const override
+    { return "break"; }
+};
+
+class ContinueStatement: public JumpStatement
+{
+public:
+    virtual const char *getStatement() const override
+    { return "continue"; }
 };
 
 
