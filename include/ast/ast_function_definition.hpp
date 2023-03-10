@@ -44,4 +44,32 @@ public:
     }
 };
 
+class Compound_Statement
+    : public Expression
+{
+private:
+    ExpressionPtr Declaration_list;
+    ExpressionPtr Statement_list;
+
+public:
+    Compound_Statement(const ExpressionPtr _Declaration_list, const ExpressionPtr _Statement_list)
+        : Declaration_list(_Declaration_list), Statement_list(_Statement_list)
+    {};
+
+    virtual ~Compound_Statement()
+    {
+        delete Declaration_list;
+        delete Statement_list;
+    }
+
+    virtual void print(std::ostream &dst) const override
+    {
+        dst<<"( ";
+        Declaration_list->print(dst);
+        dst<<" ";
+        Statement_list->print(dst);
+        dst<<" )";
+    }
+};
+
 #endif
