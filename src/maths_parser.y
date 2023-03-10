@@ -229,7 +229,7 @@ DECLARATION_SPECIFIERS
 	: STORAGE_CLASS_SPECIFIER												{ $$ = $1; }
 	| STORAGE_CLASS_SPECIFIER DECLARATION_SPECIFIERS						//
 	| TYPE_SPECIFIER														{ $$ = $1; }
-	| TYPE_SPECIFIER DECLARATION_SPECIFIERS									//Variables with Types
+	| TYPE_SPECIFIER DECLARATION_SPECIFIERS									//Type followed by type/storage specifier
 	;
 
 INIT_DECLARATOR_LIST
@@ -417,7 +417,7 @@ COMPOUND_STATEMENT
 
 DECLARATION_LIST
 	: DECLARATION															{ $$ = $1; }
-	| DECLARATION_LIST DECLARATION
+	| DECLARATION_LIST DECLARATION                                          { $$ = new Declaration_list($1, $2); }
 	;
 
 STATEMENT_LIST
