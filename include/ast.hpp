@@ -10,6 +10,7 @@
 #include "ast/ast_statements.hpp"
 #include "ast/ast_declarations.hpp"
 #include "ast/ast_types.hpp"
+#include "ast/ast_if.hpp"
 
 extern const Expression *parseAST();
 
