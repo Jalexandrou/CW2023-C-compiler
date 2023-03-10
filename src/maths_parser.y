@@ -239,7 +239,7 @@ INIT_DECLARATOR_LIST
 
 INIT_DECLARATOR
 	: DECLARATOR															{ $$ = $1; }
-	| DECLARATOR T_ASSIGN INITIALIZER										//
+	| DECLARATOR T_ASSIGN INITIALIZER										{ $$ = new AssignOperator($1, $3); }
 	;
 
 STORAGE_CLASS_SPECIFIER
@@ -251,7 +251,7 @@ STORAGE_CLASS_SPECIFIER
 	;
 
 TYPE_SPECIFIER
-	: T_VOID
+	: T_VOID																{ $$ = new Void(); }
 	| T_CHAR
 	| T_SHORT
 	| T_INT 																{ $$ = new Int(); }
