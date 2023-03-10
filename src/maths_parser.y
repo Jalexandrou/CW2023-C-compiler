@@ -422,7 +422,7 @@ DECLARATION_LIST
 
 STATEMENT_LIST
 	: STATEMENT																{ $$ = $1; }
-	| STATEMENT_LIST STATEMENT												
+	| STATEMENT_LIST STATEMENT                                              { $$ = new Statement_list($1, $2); }
 	;
 
 EXPRESSION_STATEMENT
