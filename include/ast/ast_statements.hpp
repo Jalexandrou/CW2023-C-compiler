@@ -31,4 +31,65 @@ public:
     }
 };
 
+class JumpStatement
+    : public Expression
+{
+private:
+    ExpressionPtr expr;
+
+protected:
+    JumpStatement(const ExpressionPtr _expr)
+        : expr(_expr)
+    {}
+
+public:
+
+    virtual ~JumpStatement()
+    {
+        delete expr;
+    }
+
+    virtual void print(std::ostream &dst) const override
+    {
+        dst<<"( ";
+        expr->print(dst);
+        dst<<" )";
+    }
+};
+
+
+class ReturnStatement 
+    : public JumpStatement
+{
+public:
+    ReturnStatement(const ExpressionPtr _Statement)
+        : JumpStatement(_Statement)
+    {}
+
+    ReturnStatement()
+        : JumpStatement(NULL)
+    {}
+};
+
+class BreakStatement
+    : public JumpStatement
+
+{
+public:
+    BreakStatement()
+        : JumpStatement(NULL)
+    {}
+};
+
+class ContinueStatement
+    : public JumpStatement
+
+{
+public:
+    ContinueStatement()
+        : JumpStatement(NULL)
+    {}
+};
+
+
 #endif

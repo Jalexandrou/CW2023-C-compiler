@@ -422,7 +422,7 @@ DECLARATION_LIST
 
 STATEMENT_LIST
 	: STATEMENT																{ $$ = $1; }
-	| STATEMENT_LIST STATEMENT
+	| STATEMENT_LIST STATEMENT												
 	;
 
 EXPRESSION_STATEMENT
@@ -444,10 +444,10 @@ ITERATION_STATEMENT
 	;
 
 JUMP_STATEMENT
-	: T_CONTINUE T_SEMICOLON												//Jump_Statement Node (Continue)
-	| T_BREAK T_SEMICOLON													//Jump_Statement Node (Break)
-	| T_RETURN T_SEMICOLON													//Jump_Statement Node (Return)
-	| T_RETURN EXPRESSION T_SEMICOLON 		  								{ $$ = new Statement($2); } //Jump_Statement Node (Overloaded Return)
+	: T_CONTINUE T_SEMICOLON												{ $$ = new ContinueStatement(); }
+	| T_BREAK T_SEMICOLON													{ $$ = new BreakStatement(); }
+	| T_RETURN T_SEMICOLON													{ $$ = new ReturnStatement(); }
+	| T_RETURN EXPRESSION T_SEMICOLON 		  								{ $$ = new ReturnStatement($2); } //Jump_Statement Node (Overloaded Return)
 	;
 
 TRANSLATION_UNIT

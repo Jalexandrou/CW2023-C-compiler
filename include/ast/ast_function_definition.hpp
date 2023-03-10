@@ -44,28 +44,4 @@ public:
     }
 };
 
-class Statement
-    : public Expression
-{
-private:
-    ExpressionPtr Value;
-
-public:
-    Statement(ExpressionPtr _value)
-        : Value(_value)
-    {};
-
-    ExpressionPtr getValue() const 
-    {
-        return Value;
-    }
-
-    virtual void print(std::ostream &dst) const override
-    {
-        dst<<"( return ";
-        Value->print(dst);
-        dst<<";)";
-    }
-};
-
 #endif
