@@ -11,7 +11,7 @@ private:
     ExpressionPtr Declaration_right;
 
 public:
-    Declaration_list(ExpressionPtr _Declaration_left, ExpressionPtr _Declaration_right)
+    Declaration_list(const ExpressionPtr _Declaration_left, const ExpressionPtr _Declaration_right)
         : Declaration_left(_Declaration_left), Declaration_right(_Declaration_right)
     {};
 
@@ -39,7 +39,7 @@ private:
     ExpressionPtr Init_declarator_list;
 
 public:
-    Declaration(ExpressionPtr _Declaration_Specifier, ExpressionPtr _Init_declarator_list)
+    Declaration(const ExpressionPtr _Declaration_Specifier, const ExpressionPtr _Init_declarator_list)
         : Declaration_Specifier(_Declaration_Specifier), Init_declarator_list(_Init_declarator_list)
     {};
 

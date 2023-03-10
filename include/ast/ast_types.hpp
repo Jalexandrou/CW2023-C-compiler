@@ -22,11 +22,6 @@ class Int
 protected:
     virtual const char *getType() const override
     { return "int"; }
-public:
-    virtual void print(std::ostream &dst) const override
-    {
-        dst<<getType();
-    }
 };
 
 
@@ -36,11 +31,6 @@ class Void
 protected:
     virtual const char *getType() const override
     { return "void"; }
-public:
-    virtual void print(std::ostream &dst) const override
-    {
-        dst<<getType();
-    }
 };
 
 
