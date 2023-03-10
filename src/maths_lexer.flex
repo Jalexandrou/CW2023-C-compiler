@@ -51,6 +51,8 @@ if              { return T_IF; }
 else            { return T_ELSE; }
 while           { return T_WHILE; }
 return          { return T_RETURN; }
+continue        { return T_CONTINUE; }
+break           { return T_BREAK; }
 
 log             { return T_LOG; }
 exp             { return T_EXP; }

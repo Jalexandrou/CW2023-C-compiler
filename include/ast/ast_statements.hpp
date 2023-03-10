@@ -63,8 +63,11 @@ public:
 
 class JumpStatement: public Expression
 {
-public:
+protected:
+    JumpStatement()
+    {}
 
+public:
     virtual ~JumpStatement()
     {}
 
@@ -73,12 +76,10 @@ public:
     virtual void print(std::ostream &dst) const override
     {
         dst<<"( ";
-        dst << getStatement();
+        dst<<getStatement();
         dst<<"; )";
     }
 };
-
-
 
 class ReturnExpressionStatement 
     : public JumpExpressionStatement
