@@ -34,11 +34,11 @@ public:
     }
 };
 
-class NegOperator
+class NegUnary
     : public Unary
 {
 public:
-    NegOperator(const ExpressionPtr _expr)
+    NegUnary(const ExpressionPtr _expr)
         : Unary(_expr)
     {}
 
@@ -55,4 +55,87 @@ public:
     }
 };
 
+class PreIncUnary
+    : public Unary
+{
+public:
+    PreIncUnary(const ExpressionPtr _expr)
+        : Unary(_expr)
+    {}
+
+    virtual const char *getOpcode() const override
+    { return "++"; }
+};
+
+class PreDecUnary
+    : public Unary
+{
+public:
+    PreDecUnary(const ExpressionPtr _expr)
+        : Unary(_expr)
+    {}
+
+    virtual const char *getOpcode() const override
+    { return "--"; }
+};
+
+class ReferenceUnary
+    : public Unary
+{
+public:
+    ReferenceUnary(const ExpressionPtr _expr)
+        : Unary(_expr)
+    {}
+
+    virtual const char *getOpcode() const override
+    { return "&"; }
+};
+
+class PointerUnary
+    : public Unary
+{
+public:
+    PointerUnary(const ExpressionPtr _expr)
+        : Unary(_expr)
+    {}
+
+    virtual const char *getOpcode() const override
+    { return "*"; }
+};
+
+class PlusUnary
+    : public Unary
+{
+public:
+    PlusUnary(const ExpressionPtr _expr)
+        : Unary(_expr)
+    {}
+
+    virtual const char *getOpcode() const override
+    { return "+"; }
+};
+
+class BnotUnary
+    : public Unary
+{
+public:
+    BnotUnary(const ExpressionPtr _expr)
+        : Unary(_expr)
+    {}
+
+    virtual const char *getOpcode() const override
+    { return "~"; }
+};
+
+class LognotUnary
+    : public Unary
+{
+public:
+    LognotUnary(const ExpressionPtr _expr)
+        : Unary(_expr)
+    {}
+
+    virtual const char *getOpcode() const override
+    { return "!"; }
+};
 #endif

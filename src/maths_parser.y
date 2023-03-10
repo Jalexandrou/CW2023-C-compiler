@@ -31,7 +31,7 @@
 %token T_LOGNOT T_LESS T_GREATER
 
 //Binary Operators
-%token T_BOR T_LEFTSHIFT T_RIGHTSHIFT T_BNOT T_XOR T_BAND
+%token T_BOR T_LEFTSHIFT T_RIGHTSHIFT T_BNOT T_XOR
 
 //-------------------------Grammar------------------------
 %token T_LBRACKET T_RBRACKET T_RCURBRACKET T_LCURBRACKET T_SEMICOLON
@@ -70,7 +70,7 @@
 //Assignment of types for each token
 
 //-----------------------------------------Define AST exprs -------------------------------------
-%type <expr> PRIMARY_EXPRESSION POSTFIX_EXPRESSION ARGUMENT_EXPRESSION_LIST UNARY_EXPRESSION UNARY_OPERATOR
+%type <expr> PRIMARY_EXPRESSION POSTFIX_EXPRESSION ARGUMENT_EXPRESSION_LIST UNARY_EXPRESSION
 %type <expr> CAST_EXPRESSION MULTIPLICATIVE_EXPRESSION ADDITIVE_EXPRESSION SHIFT_EXPRESSION RELATIONAL_EXPRESSION
 %type <expr> EQUALITY_EXPRESSION AND_EXPRESSION EXCLUSIVE_OR_EXPRESSION INCLUSIVE_OR_EXPRESSION LOGICAL_AND_EXPRESSION
 %type <expr> LOGICAL_OR_EXPRESSION CONDITIONAL_EXPRESSION ASSIGNMENT_EXPRESSION EXPRESSION
@@ -117,20 +117,16 @@ ARGUMENT_EXPRESSION_LIST
 
 UNARY_EXPRESSION
 	: POSTFIX_EXPRESSION													{ $$ = $1; }
-	| T_INC UNARY_EXPRESSION												//Pre-Increment Node ++x
-	| T_DEC UNARY_EXPRESSION												//Pre-Decrement Node --x
-	| UNARY_OPERATOR CAST_EXPRESSION										//Create Unary Node with passed value from unary operator
+	| T_INC UNARY_EXPRESSION												{ $$ = new PreIncUnary($2);  }
+	| T_DEC UNARY_EXPRESSION												{ $$ = new PreDecUnary($2); }
+	| T_AND CAST_EXPRESSION													{ $$ = new ReferenceUnary($2); }
+	| T_STAR CAST_EXPRESSION												{ $$ = new PointerUnary($2); }
+	| T_PLUS CAST_EXPRESSION												{ $$ = new PlusUnary($2); }
+	| T_MINUS CAST_EXPRESSION												{ $$ = new NegUnary($2); }
+	| T_BNOT CAST_EXPRESSION												{ $$ = new BnotUnary($2); }
+	| T_LOGNOT CAST_EXPRESSION												{ $$ = new LognotUnary($2); }
 	| T_SIZEOF UNARY_EXPRESSION												//Create SizeOf Function Node
 	| T_SIZEOF T_LBRACKET TYPE_NAME T_RBRACKET								//Create SizeOf Function Node
-	;
-
-UNARY_OPERATOR
-	: T_BAND																
-	| T_STAR																
-	| T_PLUS																
-	| T_MINUS																
-	| T_BNOT																
-	| T_LOGNOT																
 	;
 
 CAST_EXPRESSION
@@ -172,7 +168,7 @@ EQUALITY_EXPRESSION
 
 AND_EXPRESSION
 	: EQUALITY_EXPRESSION													{ $$ = $1; }
-	| AND_EXPRESSION T_BAND EQUALITY_EXPRESSION								//binary operator x & y
+	| AND_EXPRESSION T_AND EQUALITY_EXPRESSION								//binary operator x & y
 	;
 
 EXCLUSIVE_OR_EXPRESSION
