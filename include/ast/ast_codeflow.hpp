@@ -1,5 +1,5 @@
-#ifndef ast_if_hpp
-#define ast_if_hpp
+#ifndef ast_codeflow_hpp
+#define ast_codeflow_hpp
 
 #include "ast_expression.hpp"
 
@@ -66,11 +66,45 @@ public:
         dst << "{";
         compoundStatement->print(dst);
         dst << "} ";
-        dst << "else ";
+        dst << "else";
         dst << " { ";
         elseCompoundStatement->print(dst);
-        dst << " } ";
+        dst << "}";
     }
+};
+
+
+class while_Node 
+    : public Expression
+{
+private: 
+    ExpressionPtr arg;
+    ExpressionPtr compoundStatement;
+
+public: 
+    while_Node(const ExpressionPtr _arg, const ExpressionPtr _compoundStatement)
+        : arg(_arg), compoundStatement(_compoundStatement)
+    {}
+
+    virtual ~while_Node()
+    {
+        delete arg;
+        delete compoundStatement;
+    }
+
+    ExpressionPtr getArg() const
+    { return arg; }
+
+    virtual void print(std::ostream &dst) const override
+    {
+        dst<<"while ( ";
+        arg->print(dst);
+        dst<<" ) ";
+        dst << "{";
+        compoundStatement->print(dst);
+        dst << "} ";
+    }
+
 };
 
 #endif
