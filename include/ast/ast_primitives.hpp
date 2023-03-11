@@ -5,7 +5,7 @@
 #include <iostream>
 
 class Identifier
-    : public Expression
+    : public Node
 {
 private:
     std::string id;
@@ -33,7 +33,7 @@ public:
 };
 
 class Number
-    : public Expression
+    : public Node
 {
 private:
     double value;
@@ -54,7 +54,7 @@ public:
         const std::map<std::string,double> &bindings
     ) const override
     {
-        // TODO-A : Run bin/eval_expr with a numeric expression to make sure you understand how this works.
+        // TODO-A : Run bin/eval_expr with a numeric Node to make sure you understand how this works.
         return value;
     }
 };

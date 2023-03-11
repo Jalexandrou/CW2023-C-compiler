@@ -6,13 +6,13 @@
 #include <math.h>
 
 class Operator
-    : public Expression
+    : public Node
 {
 private:
-    ExpressionPtr left;
-    ExpressionPtr right;
+    NodePtr left;
+    NodePtr right;
 protected:
-    Operator(ExpressionPtr _left, ExpressionPtr _right)
+    Operator(NodePtr _left, NodePtr _right)
         : left(_left)
         , right(_right)
     {}
@@ -25,10 +25,10 @@ public:
 
     virtual const char *getOpcode() const =0;
 
-    ExpressionPtr getLeft() const
+    NodePtr getLeft() const
     { return left; }
 
-    ExpressionPtr getRight() const
+    NodePtr getRight() const
     { return right; }
 
     virtual void print(std::ostream &dst) const override
@@ -50,7 +50,7 @@ protected:
     virtual const char *getOpcode() const override
     { return "+"; }
 public:
-    AddOperator(ExpressionPtr _left, ExpressionPtr _right)
+    AddOperator(NodePtr _left, NodePtr _right)
         : Operator(_left, _right)
     {}
     
@@ -72,7 +72,7 @@ protected:
     virtual const char *getOpcode() const override
     { return "-"; }
 public:
-    SubOperator(ExpressionPtr _left, ExpressionPtr _right)
+    SubOperator(NodePtr _left, NodePtr _right)
         : Operator(_left, _right)
     {}
     
@@ -95,7 +95,7 @@ protected:
     virtual const char *getOpcode() const override
     { return "*"; }
 public:
-    MulOperator(ExpressionPtr _left, ExpressionPtr _right)
+    MulOperator(NodePtr _left, NodePtr _right)
         : Operator(_left, _right)
     {}
 
@@ -116,7 +116,7 @@ protected:
     virtual const char *getOpcode() const override
     { return "/"; }
 public:
-    DivOperator(ExpressionPtr _left, ExpressionPtr _right)
+    DivOperator(NodePtr _left, NodePtr _right)
         : Operator(_left, _right)
     {}
 
@@ -137,7 +137,7 @@ protected:
     virtual const char *getOpcode() const override
     { return "%"; }
 public:
-    ModOperator(ExpressionPtr _left, ExpressionPtr _right)
+    ModOperator(NodePtr _left, NodePtr _right)
         : Operator(_left, _right)
     {}
 
@@ -158,7 +158,7 @@ protected:
     virtual const char *getOpcode() const override
     { return "^"; }
 public:
-    ExpOperator(ExpressionPtr _left, ExpressionPtr _right)
+    ExpOperator(NodePtr _left, NodePtr _right)
         : Operator(_left, _right)
     {}
 
@@ -180,7 +180,7 @@ class AssignOperator: public Operator {
         return "=";
     }
     public:
-    AssignOperator(ExpressionPtr _left, ExpressionPtr _right)
+    AssignOperator(NodePtr _left, NodePtr _right)
         : Operator(_left, _right)
     {}
 
@@ -192,7 +192,7 @@ class MulAssignOperator: public Operator {
         return "*=";
     }
     public:
-    MulAssignOperator(ExpressionPtr _left, ExpressionPtr _right)
+    MulAssignOperator(NodePtr _left, NodePtr _right)
         : Operator(_left, _right)
     {}
 
@@ -204,7 +204,7 @@ class DivAssignOperator: public Operator {
         return "/=";
     }
     public:
-    DivAssignOperator(ExpressionPtr _left, ExpressionPtr _right)
+    DivAssignOperator(NodePtr _left, NodePtr _right)
         : Operator(_left, _right)
     {}
 
@@ -216,7 +216,7 @@ class ModAssignOperator: public Operator {
         return "%=";
     }
     public:
-    ModAssignOperator(ExpressionPtr _left, ExpressionPtr _right)
+    ModAssignOperator(NodePtr _left, NodePtr _right)
         : Operator(_left, _right)
     {}
 
@@ -228,7 +228,7 @@ class AddAssignOperator: public Operator {
         return "+=";
     }
     public:
-    AddAssignOperator(ExpressionPtr _left, ExpressionPtr _right)
+    AddAssignOperator(NodePtr _left, NodePtr _right)
         : Operator(_left, _right)
     {}
 
@@ -240,7 +240,7 @@ class SubAssignOperator: public Operator {
         return "-=";
     }
     public:
-    SubAssignOperator(ExpressionPtr _left, ExpressionPtr _right)
+    SubAssignOperator(NodePtr _left, NodePtr _right)
         : Operator(_left, _right)
     {}
 
@@ -252,7 +252,7 @@ class LeftAssignOperator: public Operator {
         return "<<=";
     }
     public:
-    LeftAssignOperator(ExpressionPtr _left, ExpressionPtr _right)
+    LeftAssignOperator(NodePtr _left, NodePtr _right)
         : Operator(_left, _right)
     {}
 
@@ -264,7 +264,7 @@ class RightAssignOperator: public Operator {
         return ">>=";
     }
     public:
-    RightAssignOperator(ExpressionPtr _left, ExpressionPtr _right)
+    RightAssignOperator(NodePtr _left, NodePtr _right)
         : Operator(_left, _right)
     {}
 
@@ -276,7 +276,7 @@ class AndAssignOperator: public Operator {
         return "&=";
     }
     public:
-    AndAssignOperator(ExpressionPtr _left, ExpressionPtr _right)
+    AndAssignOperator(NodePtr _left, NodePtr _right)
         : Operator(_left, _right)
     {}
 
@@ -288,7 +288,7 @@ class XorAssignOperator: public Operator {
         return "^=";
     }
     public:
-    XorAssignOperator(ExpressionPtr _left, ExpressionPtr _right)
+    XorAssignOperator(NodePtr _left, NodePtr _right)
         : Operator(_left, _right)
     {}
 
@@ -300,7 +300,7 @@ class OrAssignOperator: public Operator {
         return "|=";
     }
     public:
-    OrAssignOperator(ExpressionPtr _left, ExpressionPtr _right)
+    OrAssignOperator(NodePtr _left, NodePtr _right)
         : Operator(_left, _right)
     {}
 

@@ -1,17 +1,16 @@
 #ifndef ast_statements_hpp
 #define ast_statements_hpp
 
-#include "ast_expression.hpp"
 
 class Statement_list
-    : public Expression
+    : public Node
 {
 private:
-    ExpressionPtr Statement_left;
-    ExpressionPtr Statement_right;
+    NodePtr Statement_left;
+    NodePtr Statement_right;
 
 public:
-    Statement_list(ExpressionPtr _Statement_left, ExpressionPtr _Statement_right)
+    Statement_list(NodePtr _Statement_left, NodePtr _Statement_right)
         : Statement_left(_Statement_left), Statement_right(_Statement_right)
     {};
 
@@ -32,13 +31,13 @@ public:
 };
 
 class JumpExpressionStatement
-    : public Expression
+    : public Node
 {
 private:
-    ExpressionPtr expr;
+    NodePtr expr;
 
 protected:
-    JumpExpressionStatement(const ExpressionPtr _expr)
+    JumpExpressionStatement(const NodePtr _expr)
         : expr(_expr)
     {}
 
@@ -61,7 +60,7 @@ public:
     }
 };
 
-class JumpStatement: public Expression
+class JumpStatement: public Node
 {
 protected:
     JumpStatement()
@@ -85,7 +84,7 @@ class ReturnExpressionStatement
     : public JumpExpressionStatement
 {
 public:
-    ReturnExpressionStatement(const ExpressionPtr _Statement)
+    ReturnExpressionStatement(const NodePtr _Statement)
         : JumpExpressionStatement(_Statement)
     {}
 

@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
     }
     
     // Parse the AST
-    const Expression *ast=parseAST();
+    const Node *ast=parseAST();
     
     // evaluate it with the bindings given
     double res=ast->evaluate(bindings);

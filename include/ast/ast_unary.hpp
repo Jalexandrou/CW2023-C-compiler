@@ -5,12 +5,12 @@
 #include <iostream>
 
 class Unary
-    : public Expression
+    : public Node
 {
 private:
-    ExpressionPtr expr;
+    NodePtr expr;
 protected:
-    Unary(const ExpressionPtr _expr)
+    Unary(const NodePtr _expr)
         : expr(_expr)
     {}
 public:
@@ -21,7 +21,7 @@ public:
 
     virtual const char *getOpcode() const =0;
 
-    ExpressionPtr getExpr() const
+    NodePtr getExpr() const
     { return expr; }
 
     virtual void print(std::ostream &dst) const override
@@ -38,7 +38,7 @@ class NegUnary
     : public Unary
 {
 public:
-    NegUnary(const ExpressionPtr _expr)
+    NegUnary(const NodePtr _expr)
         : Unary(_expr)
     {}
 
@@ -59,7 +59,7 @@ class PreIncUnary
     : public Unary
 {
 public:
-    PreIncUnary(const ExpressionPtr _expr)
+    PreIncUnary(const NodePtr _expr)
         : Unary(_expr)
     {}
 
@@ -71,7 +71,7 @@ class PreDecUnary
     : public Unary
 {
 public:
-    PreDecUnary(const ExpressionPtr _expr)
+    PreDecUnary(const NodePtr _expr)
         : Unary(_expr)
     {}
 
@@ -83,7 +83,7 @@ class ReferenceUnary
     : public Unary
 {
 public:
-    ReferenceUnary(const ExpressionPtr _expr)
+    ReferenceUnary(const NodePtr _expr)
         : Unary(_expr)
     {}
 
@@ -95,7 +95,7 @@ class PointerUnary
     : public Unary
 {
 public:
-    PointerUnary(const ExpressionPtr _expr)
+    PointerUnary(const NodePtr _expr)
         : Unary(_expr)
     {}
 
@@ -107,7 +107,7 @@ class PlusUnary
     : public Unary
 {
 public:
-    PlusUnary(const ExpressionPtr _expr)
+    PlusUnary(const NodePtr _expr)
         : Unary(_expr)
     {}
 
@@ -119,7 +119,7 @@ class BnotUnary
     : public Unary
 {
 public:
-    BnotUnary(const ExpressionPtr _expr)
+    BnotUnary(const NodePtr _expr)
         : Unary(_expr)
     {}
 
@@ -131,7 +131,7 @@ class LognotUnary
     : public Unary
 {
 public:
-    LognotUnary(const ExpressionPtr _expr)
+    LognotUnary(const NodePtr _expr)
         : Unary(_expr)
     {}
 

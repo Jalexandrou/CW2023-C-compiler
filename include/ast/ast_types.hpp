@@ -5,7 +5,7 @@
 #include <iostream>
 
 class Type
-    : public Expression
+    : public Node
 {
 public:
     virtual const char *getType() const=0;

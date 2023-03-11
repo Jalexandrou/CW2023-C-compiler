@@ -2,7 +2,7 @@
 
 int main()
 {
-    const Expression *ast=parseAST();
+    const Node *ast=parseAST();
 
     ast->print(std::cout);
     std::cout<<std::endl;

@@ -1,17 +1,16 @@
 #ifndef ast_codeflow_hpp
 #define ast_codeflow_hpp
 
-#include "ast_expression.hpp"
 
 class If
-    : public Expression
+    : public Node
 {
 private:
-    ExpressionPtr arg;
-    ExpressionPtr compoundStatement;
+    NodePtr arg;
+    NodePtr compoundStatement;
 
 public:
-    If(const ExpressionPtr _arg,const  ExpressionPtr _compoundStatement)
+    If(const NodePtr _arg,const  NodePtr _compoundStatement)
         : arg(_arg), compoundStatement(_compoundStatement)
     {}
 
@@ -21,7 +20,7 @@ public:
         delete compoundStatement;
     }
 
-    ExpressionPtr getArg() const
+    NodePtr getArg() const
     { return arg; }
 
     virtual void print(std::ostream &dst) const override
@@ -36,15 +35,15 @@ public:
 };
 
 class If_Else
-    : public Expression
+    : public Node
 {
 private:
-    ExpressionPtr arg;
-    ExpressionPtr compoundStatement;
-    ExpressionPtr elseCompoundStatement;
+    NodePtr arg;
+    NodePtr compoundStatement;
+    NodePtr elseCompoundStatement;
 
 public:
-    If_Else(const ExpressionPtr _arg,const  ExpressionPtr _compoundStatement, const ExpressionPtr _elseCompoundStatement)
+    If_Else(const NodePtr _arg,const  NodePtr _compoundStatement, const NodePtr _elseCompoundStatement)
         : arg(_arg), compoundStatement(_compoundStatement), elseCompoundStatement(_elseCompoundStatement)
     {}
 
@@ -55,7 +54,7 @@ public:
         delete elseCompoundStatement;
     }
 
-    ExpressionPtr getArg() const
+    NodePtr getArg() const
     { return arg; }
 
     virtual void print(std::ostream &dst) const override
@@ -75,14 +74,14 @@ public:
 
 
 class while_Node 
-    : public Expression
+    : public Node
 {
 private: 
-    ExpressionPtr arg;
-    ExpressionPtr compoundStatement;
+    NodePtr arg;
+    NodePtr compoundStatement;
 
 public: 
-    while_Node(const ExpressionPtr _arg, const ExpressionPtr _compoundStatement)
+    while_Node(const NodePtr _arg, const NodePtr _compoundStatement)
         : arg(_arg), compoundStatement(_compoundStatement)
     {}
 
@@ -92,7 +91,7 @@ public:
         delete compoundStatement;
     }
 
-    ExpressionPtr getArg() const
+    NodePtr getArg() const
     { return arg; }
 
     virtual void print(std::ostream &dst) const override

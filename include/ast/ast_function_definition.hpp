@@ -1,18 +1,17 @@
 #ifndef ast_function_definition_hpp
 #define ast_function_definition_hpp
 
-#include "ast_expression.hpp"
 
 class Function_Definition
-    : public Expression
+    : public Node
 {
 private:
-    ExpressionPtr Type;
-    ExpressionPtr Declarator;
-    ExpressionPtr Compound_Statement;
+    NodePtr Type;
+    NodePtr Declarator;
+    NodePtr Compound_Statement;
 
 public:
-    Function_Definition(ExpressionPtr _Type, ExpressionPtr _Declarator, ExpressionPtr _Compound_Statement)
+    Function_Definition(NodePtr _Type, NodePtr _Declarator, NodePtr _Compound_Statement)
         : Type(_Type), Declarator(_Declarator), Compound_Statement(_Compound_Statement)
     {};
 
@@ -23,13 +22,13 @@ public:
         delete Compound_Statement;
     }
 
-    ExpressionPtr getType() const
+    NodePtr getType() const
     { return Type; }
 
-    ExpressionPtr getDeclarator() const
+    NodePtr getDeclarator() const
     { return Declarator; }
 
-    ExpressionPtr getCompound_Statement() const
+    NodePtr getCompound_Statement() const
     { return Compound_Statement; }
 
     virtual void print(std::ostream &dst) const override
@@ -46,14 +45,14 @@ public:
 };
 
 class Compound_Statement
-    : public Expression
+    : public Node
 {
 private:
-    ExpressionPtr Declaration_list;
-    ExpressionPtr Statement_list;
+    NodePtr Declaration_list;
+    NodePtr Statement_list;
 
 public:
-    Compound_Statement(const ExpressionPtr _Declaration_list, const ExpressionPtr _Statement_list)
+    Compound_Statement(const NodePtr _Declaration_list, const NodePtr _Statement_list)
         : Declaration_list(_Declaration_list), Statement_list(_Statement_list)
     {};
 
