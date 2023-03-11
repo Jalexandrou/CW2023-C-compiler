@@ -32,6 +32,8 @@ public:
         compoundStatement->print(dst);
         dst << "} ";
     }
+
+    virtual void compile(std::ostream &dst, std::string destReg) const override {}
 };
 
 class If_Else
@@ -70,6 +72,8 @@ public:
         elseCompoundStatement->print(dst);
         dst << "}";
     }
+
+    virtual void compile(std::ostream &dst, std::string destReg) const override {}
 };
 
 
@@ -104,6 +108,7 @@ public:
         dst << "} ";
     }
 
+    virtual void compile(std::ostream &dst, std::string destReg) const override {}
 };
 
 #endif

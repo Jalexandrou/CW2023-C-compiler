@@ -32,6 +32,8 @@ public:
         expr->print(dst);
         dst << " )";
     }
+
+    virtual void compile(std::ostream &dst, std::string destReg) const override {}
 };
 
 class NegUnary

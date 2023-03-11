@@ -28,6 +28,8 @@ public:
         Statement_right->print(dst);
         dst<<" )";
     }
+
+    virtual void compile(std::ostream &dst, std::string destReg) const override {}
 };
 
 class JumpExpressionStatement
@@ -58,6 +60,8 @@ public:
         expr->print(dst);
         dst<<"; )";
     }
+
+    virtual void compile(std::ostream &dst, std::string destReg) const override {}
 };
 
 class JumpStatement: public Node
@@ -78,6 +82,9 @@ public:
         dst<<getStatement();
         dst<<"; )";
     }
+
+    virtual void compile(std::ostream &dst, std::string destReg) const override {}
+    
 };
 
 class ReturnExpressionStatement 

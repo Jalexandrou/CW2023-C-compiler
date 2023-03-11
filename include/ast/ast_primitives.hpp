@@ -22,6 +22,8 @@ public:
         dst<<id;
     }
 
+    virtual void compile(std::ostream &dst, std::string destReg) const override {}
+
     virtual double evaluate(
         const std::map<std::string,double> &bindings
     ) const override
@@ -49,6 +51,8 @@ public:
     {
         dst<<value;
     }
+
+    virtual void compile(std::ostream &dst, std::string destReg) const override {}
 
     virtual double evaluate(
         const std::map<std::string,double> &bindings

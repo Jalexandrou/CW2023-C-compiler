@@ -42,6 +42,8 @@ public:
         Compound_Statement->print(dst);
         dst<<" } )";
     }
+
+    virtual void compile(std::ostream &dst, std::string destReg) const override {}
 };
 
 class Compound_Statement
@@ -70,6 +72,8 @@ public:
         Statement_list->print(dst);
         dst<<" )";
     }
+
+    virtual void compile(std::ostream &dst, std::string destReg) const override {}
 };
 
 #endif

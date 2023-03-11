@@ -28,6 +28,8 @@ public:
         Declaration_right->print(dst);
         dst<<" )";
     }
+
+    virtual void compile(std::ostream &dst, std::string destReg) const override {}
 };
 
 class Declaration
@@ -56,6 +58,8 @@ public:
         Init_declarator_list->print(dst);
         dst<<"; )";
     }
+
+    virtual void compile(std::ostream &dst, std::string destReg) const override {}
 };
 
 #endif
