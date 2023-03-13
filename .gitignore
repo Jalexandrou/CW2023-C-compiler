@@ -1,6 +1,6 @@
 bin/
 .vscode
 *.o
-maths_parser.output
-maths_parser.tab.*
-maths_lexer.yy.*
+parser.output
+parser.tab.*
+lexer.yy.*

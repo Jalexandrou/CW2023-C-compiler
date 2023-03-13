@@ -4,7 +4,8 @@
 // Avoid error "error: `fileno' was not declared in this scope"
 extern "C" int fileno(FILE *stream);
 
-#include "maths_parser.tab.hpp"
+
+#include "parser.tab.hpp"
 %}
 
 D               [0-9]
@@ -34,7 +35,7 @@ L               [a-zA-Z_]
 (\>\>=)         { return T_RIGHT_ASSIGN; }
 (\&=)           { return T_AND_ASSIGN; }
 (\^=)           { return T_XOR_ASSIGN; }
-(\|=)           { return T_OR_ASSIGN; }             
+(\|=)           { return T_OR_ASSIGN; }
 
 (&&)            { return T_LOGAND; }
 (\|\|)          { return T_LOGOR; }
@@ -44,7 +45,7 @@ L               [a-zA-Z_]
 [(]             { return T_LBRACKET; }
 [)]             { return T_RBRACKET; }
 [{]             { return T_LCURBRACKET; }
-[}]             { return T_RCURBRACKET; }  
+[}]             { return T_RCURBRACKET; }
 [;]             { return T_SEMICOLON; }
 
 if              { return T_IF; }

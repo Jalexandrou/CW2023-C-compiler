@@ -43,7 +43,23 @@ public:
         dst<<" } )";
     }
 
-    virtual void compile(std::ostream &dst, std::string destReg) const override {}
+    virtual void compile(std::ostream &dst, std::string destReg) const override {
+
+        // std::stringstream temp;
+
+        dst << "f: \n";
+        dst << "\taddi    sp, sp, -16\n";
+        dst << "\tsw      s0, 12(sp)\n";
+        dst << "\taddi    s0, sp, 16\n";
+
+        // dst << temp.str();  //put endl in compound statement
+        dst << "\tli      " << destReg <<", " << 5 << "\n";
+
+        dst << "\tlw      s0, 12(sp)\n";
+        dst << "\taddi    sp, sp, 16\n";
+        dst << "\tjr      ra" << std::endl;
+
+    }
 };
 
 class Compound_Statement
@@ -73,9 +89,7 @@ public:
         dst<<" )";
     }
 
-    virtual void compile(std::ostream &dst, std::string destReg) const override {
-        dst << "COMPILING";
-    }
+    virtual void compile(std::ostream &dst, std::string destReg) const override {}
 };
 
 #endif

@@ -1,9 +1,10 @@
 %code requires{
+
   #include "ast.hpp"
 
-  #include <cassert>
-
   extern const Node *g_root; // A way of getting the AST out
+
+  extern FILE *yyin;
 
   //! This is to fix problems when generating C++
   // We are declaring the functions provided by Flex, so
@@ -20,7 +21,7 @@
   std::string *string;
 }
 
-//List of terminal tokens, given from lexer shown with a T 
+//List of terminal tokens, given from lexer shown with a T
 
 //--------------------------Operators----------------------
 
@@ -42,7 +43,7 @@
 %token T_FOR T_CONTINUE T_BREAK T_QUESTIONMARK
 
 //-------------------------Types--------------------------
-%token T_INT T_VOID T_ENUM T_STRUCT T_UNION T_CHAR T_SHORT T_LONG 
+%token T_INT T_VOID T_ENUM T_STRUCT T_UNION T_CHAR T_SHORT T_LONG
 %token T_SIGNED T_UNSIGNED T_FLOAT T_DOUBLE T_VOLATILE
 
 //-------------------------Assignments--------------------
@@ -80,7 +81,7 @@
 %type <node> PARAMETER_LIST PARAMETER_DECLARATION IDENTIFIER_LIST TYPE_NAME ABSTRACT_DECLARATOR DIRECT_ABSTRACT_DECLARATOR
 %type <node> INITIALIZER INITIALIZER_LIST STATEMENT LABELED_STATEMENT COMPOUND_STATEMENT DECLARATION_LIST STATEMENT_LIST
 %type <node> EXPRESSION_STATEMENT SELECTION_STATEMENT ITERATION_STATEMENT JUMP_STATEMENT TRANSLATION_UNIT EXTERNAL_DECLARATION
-%type <node> FUNCTION_DEFINITION SPECIFIER_QUALIFIER_LIST STRUCT_DECLARATOR STRUCT_DECLARATOR_LIST 
+%type <node> FUNCTION_DEFINITION SPECIFIER_QUALIFIER_LIST STRUCT_DECLARATOR STRUCT_DECLARATOR_LIST
 
 //give the terminal leaf node number the TYPE of number
 %type <number> T_NUMBER
@@ -88,7 +89,7 @@
 //give the terminal leaf node of string to IDENTIFIER
 %type <string> T_IDENTIFIER T_STRING_LITERAL
 
-%start TRANSLATION_UNIT 
+%start TRANSLATION_UNIT
 
 %%
 
@@ -140,7 +141,7 @@ MULTIPLICATIVE_EXPRESSION
 	| MULTIPLICATIVE_EXPRESSION T_MOD CAST_EXPRESSION						{ $$ = new ModOperator($1, $3); }
 	;
 
-ADDITIVE_EXPRESSION	
+ADDITIVE_EXPRESSION
 	: MULTIPLICATIVE_EXPRESSION												{ $$ = $1; }
 	| ADDITIVE_EXPRESSION T_PLUS MULTIPLICATIVE_EXPRESSION					{ $$ = new AddOperator($1, $3); }
 	| ADDITIVE_EXPRESSION T_MINUS MULTIPLICATIVE_EXPRESSION					{ $$ = new SubOperator($1, $3); }
@@ -234,7 +235,7 @@ DECLARATION_SPECIFIERS
 
 INIT_DECLARATOR_LIST
 	: INIT_DECLARATOR														{ $$ = $1; }
-	| INIT_DECLARATOR_LIST T_COMMA INIT_DECLARATOR							//concatenate declarators 
+	| INIT_DECLARATOR_LIST T_COMMA INIT_DECLARATOR							//concatenate declarators
 	;
 
 INIT_DECLARATOR
@@ -245,7 +246,7 @@ INIT_DECLARATOR
 STORAGE_CLASS_SPECIFIER
 	: T_TYPEDEF																//weird lexer thingy
 	| T_EXTERN																//assume it is already declared
-	| T_STATIC																
+	| T_STATIC
 	| T_AUTO
 	| T_REGISTER
 	;
@@ -333,7 +334,7 @@ DIRECT_DECLARATOR
 	;
 
 POINTER
-	: T_STAR								
+	: T_STAR
 	| T_STAR POINTER
 	;
 
@@ -426,7 +427,7 @@ STATEMENT_LIST
 	;
 
 EXPRESSION_STATEMENT
-	: T_SEMICOLON															
+	: T_SEMICOLON
 	| EXPRESSION T_SEMICOLON												{ $$ = $1; }
 	;
 
@@ -452,7 +453,7 @@ JUMP_STATEMENT
 
 TRANSLATION_UNIT
 	: EXTERNAL_DECLARATION                    								{ g_root = $1; }
-	| TRANSLATION_UNIT EXTERNAL_DECLARATION									
+	| TRANSLATION_UNIT EXTERNAL_DECLARATION
 	;
 
 EXTERNAL_DECLARATION
@@ -464,7 +465,7 @@ FUNCTION_DEFINITION
 	: DECLARATION_SPECIFIERS DECLARATOR DECLARATION_LIST COMPOUND_STATEMENT
 	| DECLARATION_SPECIFIERS DECLARATOR COMPOUND_STATEMENT 					{ $$ = new Function_Definition($1, $2, $3); }
 	| DECLARATOR DECLARATION_LIST COMPOUND_STATEMENT
-	| DECLARATOR COMPOUND_STATEMENT											
+	| DECLARATOR COMPOUND_STATEMENT
 	;
 %%
 
@@ -472,7 +473,22 @@ const Node *g_root; // DEFINITION of variable (to match DECLARATION earlier)
 
 const Node *parseAST()
 {
-  g_root=0;
+  g_root = NULL;
   yyparse();
   return g_root;
 }
+
+/* Node *parseAST(std::string source)
+{
+  yyin = fopen(source.c_str(), "r");
+  if (yyin == NULL)
+  {
+    perror("Could not open source file");
+    return 1;
+  }
+  g_root = NULL;
+  yyparse();
+  return g_root;
+} */
+
+
