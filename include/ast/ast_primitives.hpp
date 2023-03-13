@@ -31,7 +31,7 @@ public:
         // TODO-B : Run bin/eval_expr with a variable binding to make sure you understand how this works.
         // If the binding does not exist, this will throw an error
         return bindings.at(id);
-    }    
+    }
 };
 
 class Number

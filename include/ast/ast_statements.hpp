@@ -29,7 +29,10 @@ public:
         dst<<" )";
     }
 
-    virtual void compile(std::ostream &dst, std::string destReg) const override {}
+    virtual void compile(std::ostream &dst, std::string destReg) const override {
+        Statement_left->compile(dst, destReg);
+        Statement_right->compile(dst, destReg);
+    }
 };
 
 class JumpExpressionStatement
@@ -39,7 +42,7 @@ private:
     NodePtr expr;
 
 protected:
-    JumpExpressionStatement(const NodePtr _expr)
+    JumpExpressionStatement(NodePtr _expr)
         : expr(_expr)
     {}
 
@@ -61,7 +64,12 @@ public:
         dst<<"; )";
     }
 
-    virtual void compile(std::ostream &dst, std::string destReg) const override {}
+    virtual void compile(std::ostream &dst, std::string destReg) const override {
+        std::string statement = getStatement();
+        if (statement == "return"){
+            dst << "\tli      " << destReg << ", " << dynamic_cast<const Number*>(expr)->getValue() << std::endl;
+        }
+    }
 };
 
 class JumpStatement: public Node
@@ -84,19 +92,20 @@ public:
     }
 
     virtual void compile(std::ostream &dst, std::string destReg) const override {}
-    
+
 };
 
-class ReturnExpressionStatement 
+class ReturnExpressionStatement
     : public JumpExpressionStatement
 {
 public:
-    ReturnExpressionStatement(const NodePtr _Statement)
+    ReturnExpressionStatement(NodePtr _Statement)
         : JumpExpressionStatement(_Statement)
     {}
 
     virtual const char *getStatement() const override
     { return "return"; }
+
 };
 
 class ReturnStatement: public JumpStatement

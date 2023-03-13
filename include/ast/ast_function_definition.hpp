@@ -1,7 +1,7 @@
 #ifndef ast_function_definition_hpp
 #define ast_function_definition_hpp
 
-
+typedef const Identifier *IdenPtr;
 class Function_Definition
     : public Node
 {
@@ -45,15 +45,17 @@ public:
 
     virtual void compile(std::ostream &dst, std::string destReg) const override {
 
-        // std::stringstream temp;
+        dst << dynamic_cast<IdenPtr>(Declarator)->getId() << ':' << std::endl;
 
-        dst << "f: \n";
+        std::stringstream temp;
+        Compound_Statement->compile(temp, destReg);
+
         dst << "\taddi    sp, sp, -16\n";
         dst << "\tsw      s0, 12(sp)\n";
         dst << "\taddi    s0, sp, 16\n";
 
-        // dst << temp.str();  //put endl in compound statement
-        dst << "\tli      " << destReg <<", " << 5 << "\n";
+        dst << temp.str();
+        // dst << "\tli      " << destReg <<", " << 5 << "\n";
 
         dst << "\tlw      s0, 12(sp)\n";
         dst << "\taddi    sp, sp, 16\n";
@@ -89,7 +91,8 @@ public:
         dst<<" )";
     }
 
-    virtual void compile(std::ostream &dst, std::string destReg) const override {}
+    virtual void compile(std::ostream &dst, std::string destReg) const override {
+    }
 };
 
 #endif
