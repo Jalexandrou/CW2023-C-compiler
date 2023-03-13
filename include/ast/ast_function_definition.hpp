@@ -73,7 +73,9 @@ public:
         dst<<" )";
     }
 
-    virtual void compile(std::ostream &dst, std::string destReg) const override {}
+    virtual void compile(std::ostream &dst, std::string destReg) const override {
+        dst << "COMPILING";
+    }
 };
 
 #endif
