@@ -14,7 +14,7 @@ public:
         : id(_id)
     {}
 
-    const std::string getId() const
+    const std::string getId() const override
     { return id; }
 
     virtual void print(std::ostream &dst) const override

@@ -45,7 +45,7 @@ public:
 
     virtual void compile(std::ostream &dst, std::string destReg) const override {
 
-        dst << dynamic_cast<IdenPtr>(Declarator)->getId() << ':' << std::endl;
+        dst << Declarator->getId() << ':' << std::endl;
 
         std::stringstream temp;
         Compound_Statement->compile(temp, destReg);

@@ -1,7 +1,7 @@
 .text
 .globl f
 
-test:
+Corey:
 	addi    sp, sp, -16
 	sw      s0, 12(sp)
 	addi    s0, sp, 16

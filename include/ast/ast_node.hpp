@@ -23,6 +23,8 @@ public:
 
     virtual void compile(std::ostream &dst, std::string destReg) const = 0;
 
+    virtual const std::string getId() const { throw std::runtime_error("Not implemented getId() here"); }
+
     //! Evaluate the tree using the given mapping of variables to numbers
     // Don't need but will keep for now
     virtual double evaluate(

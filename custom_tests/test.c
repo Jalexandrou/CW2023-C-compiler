@@ -1,3 +1,3 @@
-int test(){
+int Corey(){
 return 3;
 }
