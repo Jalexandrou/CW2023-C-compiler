@@ -118,14 +118,14 @@ ARGUMENT_EXPRESSION_LIST
 
 UNARY_EXPRESSION
 	: POSTFIX_EXPRESSION													{ $$ = $1; }
-	| T_INC UNARY_EXPRESSION												{ $$ = new PreIncUnary($2);  }
-	| T_DEC UNARY_EXPRESSION												{ $$ = new PreDecUnary($2); }
-	| T_AND CAST_EXPRESSION													{ $$ = new ReferenceUnary($2); }
-	| T_STAR CAST_EXPRESSION												{ $$ = new PointerUnary($2); }
-	| T_PLUS CAST_EXPRESSION												{ $$ = new PlusUnary($2); }
-	| T_MINUS CAST_EXPRESSION												{ $$ = new NegUnary($2); }
-	| T_BNOT CAST_EXPRESSION												{ $$ = new BnotUnary($2); }
-	| T_LOGNOT CAST_EXPRESSION												{ $$ = new LognotUnary($2); }
+	| T_INC UNARY_EXPRESSION												{ $$ = new Unary($2, "++");  }
+	| T_DEC UNARY_EXPRESSION												{ $$ = new Unary($2, "--");  }
+	| T_AND CAST_EXPRESSION													{ $$ = new Unary($2, "&");  }
+	| T_STAR CAST_EXPRESSION												{ $$ = new Unary($2, "*");  }
+	| T_PLUS CAST_EXPRESSION												{ $$ = new Unary($2, "+");  }
+	| T_MINUS CAST_EXPRESSION												{ $$ = new Unary($2, "-");  }
+	| T_BNOT CAST_EXPRESSION												{ $$ = new Unary($2, "~");  }
+	| T_LOGNOT CAST_EXPRESSION												{ $$ = new Unary($2, "!");  }
 	| T_SIZEOF UNARY_EXPRESSION												//Create SizeOf Function Node
 	| T_SIZEOF T_LBRACKET TYPE_NAME T_RBRACKET								//Create SizeOf Function Node
 	;
@@ -136,15 +136,15 @@ CAST_EXPRESSION
 
 MULTIPLICATIVE_EXPRESSION
 	: CAST_EXPRESSION														{ $$ = $1; }
-	| MULTIPLICATIVE_EXPRESSION T_STAR CAST_EXPRESSION						{ $$ = new MulOperator($1, $3); }
-	| MULTIPLICATIVE_EXPRESSION T_DIVIDE CAST_EXPRESSION					{ $$ = new DivOperator($1, $3); }
-	| MULTIPLICATIVE_EXPRESSION T_MOD CAST_EXPRESSION						{ $$ = new ModOperator($1, $3); }
+	| MULTIPLICATIVE_EXPRESSION T_STAR CAST_EXPRESSION						{ $$ = new Operator($1, "*", $3); }
+	| MULTIPLICATIVE_EXPRESSION T_DIVIDE CAST_EXPRESSION					{ $$ = new Operator($1, "/", $3); }
+	| MULTIPLICATIVE_EXPRESSION T_MOD CAST_EXPRESSION						{ $$ = new Operator($1, "%", $3); }
 	;
 
 ADDITIVE_EXPRESSION
 	: MULTIPLICATIVE_EXPRESSION												{ $$ = $1; }
-	| ADDITIVE_EXPRESSION T_PLUS MULTIPLICATIVE_EXPRESSION					{ $$ = new AddOperator($1, $3); }
-	| ADDITIVE_EXPRESSION T_MINUS MULTIPLICATIVE_EXPRESSION					{ $$ = new SubOperator($1, $3); }
+	| ADDITIVE_EXPRESSION T_PLUS MULTIPLICATIVE_EXPRESSION					{ $$ = new Operator($1, "+", $3); }
+	| ADDITIVE_EXPRESSION T_MINUS MULTIPLICATIVE_EXPRESSION					{ $$ = new Operator($1, "-", $3); }
 	;
 
 SHIFT_EXPRESSION
@@ -199,17 +199,17 @@ CONDITIONAL_EXPRESSION
 
 ASSIGNMENT_EXPRESSION
 	: CONDITIONAL_EXPRESSION												{ $$ = $1; }
-	| UNARY_EXPRESSION T_ASSIGN ASSIGNMENT_EXPRESSION						{ $$ = new AssignOperator($1, $3); }			//Assignment x = y , x+=y, x*=y ...
-	| UNARY_EXPRESSION T_MUL_ASSIGN ASSIGNMENT_EXPRESSION					{ $$ = new MulAssignOperator($1, $3); }
-	| UNARY_EXPRESSION T_DIV_ASSIGN ASSIGNMENT_EXPRESSION					{ $$ = new DivAssignOperator($1, $3); }
-	| UNARY_EXPRESSION T_MOD_ASSIGN ASSIGNMENT_EXPRESSION					{ $$ = new ModAssignOperator($1, $3); }
-	| UNARY_EXPRESSION T_ADD_ASSIGN ASSIGNMENT_EXPRESSION					{ $$ = new AddAssignOperator($1, $3); }
-	| UNARY_EXPRESSION T_SUB_ASSIGN ASSIGNMENT_EXPRESSION					{ $$ = new SubAssignOperator($1, $3); }
-	| UNARY_EXPRESSION T_LEFT_ASSIGN ASSIGNMENT_EXPRESSION					{ $$ = new LeftAssignOperator($1, $3); }
-	| UNARY_EXPRESSION T_RIGHT_ASSIGN ASSIGNMENT_EXPRESSION					{ $$ = new RightAssignOperator($1, $3); }
-	| UNARY_EXPRESSION T_AND_ASSIGN ASSIGNMENT_EXPRESSION					{ $$ = new AndAssignOperator($1, $3); }
-	| UNARY_EXPRESSION T_XOR_ASSIGN ASSIGNMENT_EXPRESSION					{ $$ = new XorAssignOperator($1, $3); }
-	| UNARY_EXPRESSION T_OR_ASSIGN ASSIGNMENT_EXPRESSION					{ $$ = new OrAssignOperator($1, $3); }
+	| UNARY_EXPRESSION T_ASSIGN ASSIGNMENT_EXPRESSION						{ $$ = new Operator($1, "=", $3); }//Assignment x = y , x+=y, x*=y ...
+	| UNARY_EXPRESSION T_MUL_ASSIGN ASSIGNMENT_EXPRESSION					{ $$ = new Operator($1, "*=", $3); }
+	| UNARY_EXPRESSION T_DIV_ASSIGN ASSIGNMENT_EXPRESSION					{ $$ = new Operator($1, "/=", $3); }
+	| UNARY_EXPRESSION T_MOD_ASSIGN ASSIGNMENT_EXPRESSION					{ $$ = new Operator($1, "%=", $3); }
+	| UNARY_EXPRESSION T_ADD_ASSIGN ASSIGNMENT_EXPRESSION					{ $$ = new Operator($1, "+=", $3); }
+	| UNARY_EXPRESSION T_SUB_ASSIGN ASSIGNMENT_EXPRESSION					{ $$ = new Operator($1, "-=", $3); }
+	| UNARY_EXPRESSION T_LEFT_ASSIGN ASSIGNMENT_EXPRESSION					{ $$ = new Operator($1, "<<=", $3); }
+	| UNARY_EXPRESSION T_RIGHT_ASSIGN ASSIGNMENT_EXPRESSION					{ $$ = new Operator($1, ">>=", $3); }
+	| UNARY_EXPRESSION T_AND_ASSIGN ASSIGNMENT_EXPRESSION					{ $$ = new Operator($1, "&=", $3); }
+	| UNARY_EXPRESSION T_XOR_ASSIGN ASSIGNMENT_EXPRESSION					{ $$ = new Operator($1, "^=", $3); }
+	| UNARY_EXPRESSION T_OR_ASSIGN ASSIGNMENT_EXPRESSION					{ $$ = new Operator($1, "|=", $3); }
 	;
 
 EXPRESSION
@@ -240,7 +240,7 @@ INIT_DECLARATOR_LIST
 
 INIT_DECLARATOR
 	: DECLARATOR															{ $$ = $1; }
-	| DECLARATOR T_ASSIGN INITIALIZER										{ $$ = new AssignOperator($1, $3); }
+	| DECLARATOR T_ASSIGN INITIALIZER										{ $$ = new Operator($1, "=", $3); }
 	;
 
 STORAGE_CLASS_SPECIFIER
@@ -445,10 +445,10 @@ ITERATION_STATEMENT
 	;
 
 JUMP_STATEMENT
-	: T_CONTINUE T_SEMICOLON												{ $$ = new ContinueStatement(); }
-	| T_BREAK T_SEMICOLON													{ $$ = new BreakStatement(); }
-	| T_RETURN T_SEMICOLON													{ $$ = new ReturnStatement(); }
-	| T_RETURN EXPRESSION T_SEMICOLON 		  								{ $$ = new ReturnExpressionStatement($2); }
+	: T_CONTINUE T_SEMICOLON												{ $$ = new JumpStatement("continue"); }
+	| T_BREAK T_SEMICOLON													{ $$ = new JumpStatement("break"); }
+	| T_RETURN T_SEMICOLON													{ $$ = new JumpStatement("return"); }
+	| T_RETURN EXPRESSION T_SEMICOLON 		  								{ $$ = new JumpExpressionStatement($2, "return"); }
 	;
 
 TRANSLATION_UNIT

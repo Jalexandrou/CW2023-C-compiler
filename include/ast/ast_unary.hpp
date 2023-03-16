@@ -9,22 +9,27 @@ class Unary
 {
 private:
     NodePtr expr;
-protected:
-    Unary(const NodePtr _expr)
-        : expr(_expr)
-    {}
+    std::string Opcode;
+
 public:
-    virtual ~Unary()
+
+    Unary(NodePtr _expr, std::string _Opcode)
+        : expr(_expr)
+        , Opcode(_Opcode)
+    {}
+
+    ~Unary()
     {
         delete expr;
     }
 
-    virtual const char *getOpcode() const =0;
+    std::string getOpcode() const
+    { return Opcode; }
 
     NodePtr getExpr() const
     { return expr; }
 
-    virtual void print(std::ostream &dst) const override
+    void print(std::ostream &dst) const
     {
         dst << "( ";
         dst << getOpcode();
@@ -33,111 +38,29 @@ public:
         dst << " )";
     }
 
-    virtual void compile(std::ostream &dst, std::string destReg) const override {}
-};
-
-class NegUnary
-    : public Unary
-{
-public:
-    NegUnary(const NodePtr _expr)
-        : Unary(_expr)
-    {}
-
-    virtual const char *getOpcode() const override
-    { return "-"; }
-
-    virtual double evaluate(
-        const std::map<std::string, double> &bindings
-    ) const override
-    {
-        // TODO-F: Implement this similar to how AddOperator was implemented.
-        double value = getExpr()->evaluate(bindings);
-        return -value;
+    void compile(std::ostream &dst, std::string destReg) const {
+        std::string opcode = getOpcode();
+        expr->compile(dst, destReg);
+        if(opcode == "-"){
+            dst << "\tneg     " << destReg << ", " << destReg << "\n";
+        }else if(opcode == "++"){
+            dst << "\taddi    " << destReg << ", " << destReg << ", 1"<< "\n";
+        }else if(opcode == "--"){
+            dst << "\taddi    " << destReg << ", " << destReg << ", -1"<< "\n";
+        }else if(opcode == "&"){
+            //fetch from context
+        }else if(opcode == "*"){
+            //fetch from context
+        }else if(opcode == "+"){
+            //Does this do anything?
+        }else if(opcode == "~"){
+            dst << "\tnot     " << destReg << ", " << destReg << "\n";
+        }else if(opcode == "!"){
+            //Weird ASM
+        }else {
+            throw std::runtime_error("This Unary Operator is not implemented");
+        }
     }
 };
 
-class PreIncUnary
-    : public Unary
-{
-public:
-    PreIncUnary(const NodePtr _expr)
-        : Unary(_expr)
-    {}
-
-    virtual const char *getOpcode() const override
-    { return "++"; }
-};
-
-class PreDecUnary
-    : public Unary
-{
-public:
-    PreDecUnary(const NodePtr _expr)
-        : Unary(_expr)
-    {}
-
-    virtual const char *getOpcode() const override
-    { return "--"; }
-};
-
-class ReferenceUnary
-    : public Unary
-{
-public:
-    ReferenceUnary(const NodePtr _expr)
-        : Unary(_expr)
-    {}
-
-    virtual const char *getOpcode() const override
-    { return "&"; }
-};
-
-class PointerUnary
-    : public Unary
-{
-public:
-    PointerUnary(const NodePtr _expr)
-        : Unary(_expr)
-    {}
-
-    virtual const char *getOpcode() const override
-    { return "*"; }
-};
-
-class PlusUnary
-    : public Unary
-{
-public:
-    PlusUnary(const NodePtr _expr)
-        : Unary(_expr)
-    {}
-
-    virtual const char *getOpcode() const override
-    { return "+"; }
-};
-
-class BnotUnary
-    : public Unary
-{
-public:
-    BnotUnary(const NodePtr _expr)
-        : Unary(_expr)
-    {}
-
-    virtual const char *getOpcode() const override
-    { return "~"; }
-};
-
-class LognotUnary
-    : public Unary
-{
-public:
-    LognotUnary(const NodePtr _expr)
-        : Unary(_expr)
-    {}
-
-    virtual const char *getOpcode() const override
-    { return "!"; }
-};
 #endif

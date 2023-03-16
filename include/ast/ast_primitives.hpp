@@ -52,7 +52,9 @@ public:
         dst<<value;
     }
 
-    virtual void compile(std::ostream &dst, std::string destReg) const override {}
+    void compile(std::ostream &dst, std::string destReg) const {
+        dst << "    li      " << destReg << ", " << getValue() << std::endl;
+    }
 
     virtual double evaluate(
         const std::map<std::string,double> &bindings

@@ -24,7 +24,7 @@ L               [a-zA-Z_]
 (\&)            { return T_AND; }
 (\!)            { return T_LOGNOT; }
 
-[=]             { return T_ASSIGN; }
+[=]             { return '='; }
 (\*=)           { return T_MUL_ASSIGN; }
 (\/=)           { return T_DIV_ASSIGN; }
 (\%=)           { return T_MOD_ASSIGN; }
