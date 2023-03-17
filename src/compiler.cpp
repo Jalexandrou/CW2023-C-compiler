@@ -3,23 +3,23 @@
 #include <fstream>
 #include <iostream>
 #include <unistd.h>
+#include <map>
 
 #include "cli.h"
 
 void compile(std::ostream &w)
 {
+    Context context;
+    context.pointerOffset = -4; //Pointer Offset Value
+
     w << ".text" << std::endl;
-    w << ".globl f" << std::endl;
+    // w << ".globl f" << std::endl;
     w << std::endl;
-    // w << "f:" << std::endl;
-    // w << "addi  t0, zero, 0" << std::endl;
-    // w << "addi  t0, t0,   5" << std::endl;
-    // w << "add   a0, zero, t0" << std::endl;
-    // w << "ret" << std::endl;
 
     const Node *ast = parseAST();
     // w << "parsed";
-    ast->compile(w, "a0");
+
+    ast->compile(w, "a0", context);
 
 }
 

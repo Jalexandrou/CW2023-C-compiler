@@ -17,12 +17,25 @@ public:
     const std::string getId() const override
     { return id; }
 
-    virtual void print(std::ostream &dst) const override
+    void print(std::ostream &dst) const override
     {
         dst<<id;
     }
 
-    virtual void compile(std::ostream &dst, std::string destReg) const override {}
+    void compile(std::ostream &dst, std::string destReg, Context &context) const{
+        //Load the Immediate Value then store it into the stack, as the stack is larger change the context offset
+        if(context.bindings.count(getId())){
+            dst << "\tlw      " << destReg << ", " << context.bindings[getId()] << "(s0)" << std::endl;
+            dst << "\tsw      " << destReg << ", " << context.pointerOffset << "(s0)" << std::endl;
+            context.pointerOffset -= 4;
+        }else{
+            //SHOULD NOT OCCOUR JUST ACTS AS A BACKUP
+            dst << "\tli      " << destReg << ", " << 0 << std::endl;
+            dst << "\tsw      " << destReg << ", " << context.pointerOffset << "(s0)" << std::endl;
+            context.bindings[getId()] = context.pointerOffset;
+            context.pointerOffset -= 4;
+        }
+    }
 
     virtual double evaluate(
         const std::map<std::string,double> &bindings
@@ -52,8 +65,11 @@ public:
         dst<<value;
     }
 
-    void compile(std::ostream &dst, std::string destReg) const {
-        dst << "    li      " << destReg << ", " << getValue() << std::endl;
+    void compile(std::ostream &dst, std::string destReg, Context &context) const {
+        //Load the Immediate Value then store it into the stack, as the stack is larger change the context offset
+        dst << "\tli      " << destReg << ", " << getValue() << std::endl;
+        dst << "\tsw      " << destReg << ", " << context.pointerOffset << "(s0)" << std::endl;
+        context.pointerOffset -= 4;
     }
 
     virtual double evaluate(

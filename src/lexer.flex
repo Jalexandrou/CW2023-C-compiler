@@ -24,7 +24,7 @@ L               [a-zA-Z_]
 (\&)            { return T_AND; }
 (\!)            { return T_LOGNOT; }
 
-[=]             { return '='; }
+[=]             { return T_ASSIGN; }
 (\*=)           { return T_MUL_ASSIGN; }
 (\/=)           { return T_DIV_ASSIGN; }
 (\%=)           { return T_MOD_ASSIGN; }
@@ -47,6 +47,7 @@ L               [a-zA-Z_]
 [{]             { return T_LCURBRACKET; }
 [}]             { return T_RCURBRACKET; }
 [;]             { return T_SEMICOLON; }
+[,]             { return T_COMMA;}
 
 if              { return T_IF; }
 else            { return T_ELSE; }

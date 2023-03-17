@@ -33,7 +33,9 @@ public:
         dst << "} ";
     }
 
-    virtual void compile(std::ostream &dst, std::string destReg) const override {}
+    virtual void compile(std::ostream &dst, std::string destReg, Context &context) const {
+
+    }
 };
 
 class If_Else
@@ -73,18 +75,20 @@ public:
         dst << "}";
     }
 
-    virtual void compile(std::ostream &dst, std::string destReg) const override {}
+    virtual void compile(std::ostream &dst, std::string destReg, Context &context) const {
+
+    }
 };
 
 
-class while_Node 
+class while_Node
     : public Node
 {
-private: 
+private:
     NodePtr arg;
     NodePtr compoundStatement;
 
-public: 
+public:
     while_Node(const NodePtr _arg, const NodePtr _compoundStatement)
         : arg(_arg), compoundStatement(_compoundStatement)
     {}
@@ -108,7 +112,9 @@ public:
         dst << "} ";
     }
 
-    virtual void compile(std::ostream &dst, std::string destReg) const override {}
+    virtual void compile(std::ostream &dst, std::string destReg, Context &context) const {
+
+    }
 };
 
 #endif

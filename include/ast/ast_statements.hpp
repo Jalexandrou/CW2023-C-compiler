@@ -29,9 +29,9 @@ public:
         dst<<" )";
     }
 
-    virtual void compile(std::ostream &dst, std::string destReg) const override {
-        Statement_left->compile(dst, destReg);
-        Statement_right->compile(dst, destReg);
+    virtual void compile(std::ostream &dst, std::string destReg, Context &context) const override {
+        Statement_left->compile(dst, destReg, context);
+        Statement_right->compile(dst, destReg, context);
     }
 };
 
@@ -68,10 +68,10 @@ public:
         dst<<"; )";
     }
 
-    virtual void compile(std::ostream &dst, std::string destReg) const override {
+    virtual void compile(std::ostream &dst, std::string destReg, Context &context) const override {
         std::string statement = getStatement();
         if (statement == "return"){
-            expr->compile(dst, destReg);
+            expr->compile(dst, destReg, context);
         }
     }
 };
@@ -100,7 +100,7 @@ public:
         dst<<"; )";
     }
 
-    void compile(std::ostream &dst, std::string destReg)const {
+    void compile(std::ostream &dst, std::string destReg, Context &context)const {
         std::string statement = getStatement();
         if (statement == "return"){
 

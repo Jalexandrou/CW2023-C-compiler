@@ -1,9 +1,9 @@
 #include <stdio.h>
 
-int f();
+int f(int x);
 
 int main()
 {
-    printf("%d", f());
-    return !( 10==f() );
+    printf("%d", f(5));
+    return !( 5==f(5) );
 }

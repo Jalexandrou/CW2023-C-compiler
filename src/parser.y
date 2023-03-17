@@ -149,47 +149,47 @@ ADDITIVE_EXPRESSION
 
 SHIFT_EXPRESSION
 	: ADDITIVE_EXPRESSION													{ $$ = $1; }
-	| SHIFT_EXPRESSION T_LEFTSHIFT ADDITIVE_EXPRESSION						//Left shift node x << y
-	| SHIFT_EXPRESSION T_RIGHTSHIFT ADDITIVE_EXPRESSION						//Right shift node x >> y
+	| SHIFT_EXPRESSION T_LEFTSHIFT ADDITIVE_EXPRESSION						{ $$ = new Operator($1, "<<", $3); }
+	| SHIFT_EXPRESSION T_RIGHTSHIFT ADDITIVE_EXPRESSION						{ $$ = new Operator($1, ">>", $3); }
 	;
 
 RELATIONAL_EXPRESSION
 	: SHIFT_EXPRESSION														{ $$ = $1; }
-	| RELATIONAL_EXPRESSION T_LESS SHIFT_EXPRESSION							//Less than Logical Node <
-	| RELATIONAL_EXPRESSION T_GREATER SHIFT_EXPRESSION						//Greater Than 			 >
-	| RELATIONAL_EXPRESSION T_LESSEQUALS SHIFT_EXPRESSION					//Less than Equals Node <=
-	| RELATIONAL_EXPRESSION T_GREATEREQUALS SHIFT_EXPRESSION				//Greater than Equals Node >=
+	| RELATIONAL_EXPRESSION T_LESS SHIFT_EXPRESSION							{ $$ = new LogicalOperator($1, "<", $3); }//Less than Logical Node <
+	| RELATIONAL_EXPRESSION T_GREATER SHIFT_EXPRESSION						{ $$ = new LogicalOperator($1, ">", $3); }//Greater Than 			 >
+	| RELATIONAL_EXPRESSION T_LESSEQUALS SHIFT_EXPRESSION					{ $$ = new LogicalOperator($1, "<=", $3); }//Less than Equals Node <=
+	| RELATIONAL_EXPRESSION T_GREATEREQUALS SHIFT_EXPRESSION				{ $$ = new LogicalOperator($1, ">=", $3); }//Greater than Equals Node >=
 	;
 
 EQUALITY_EXPRESSION
 	: RELATIONAL_EXPRESSION													{ $$ = $1; }
-	| EQUALITY_EXPRESSION T_EQUALS RELATIONAL_EXPRESSION					//Logical Equals Node ==
-	| EQUALITY_EXPRESSION T_NOTEQUAL RELATIONAL_EXPRESSION					//Logical Not Equals Node !=
+	| EQUALITY_EXPRESSION T_EQUALS RELATIONAL_EXPRESSION					{ $$ = new LogicalOperator($1, ">=", $3); }//Logical Equals Node ==
+	| EQUALITY_EXPRESSION T_NOTEQUAL RELATIONAL_EXPRESSION					{ $$ = new LogicalOperator($1, ">=", $3); }//Logical Not Equals Node !=
 	;
 
 AND_EXPRESSION
 	: EQUALITY_EXPRESSION													{ $$ = $1; }
-	| AND_EXPRESSION T_AND EQUALITY_EXPRESSION								//binary operator x & y
+	| AND_EXPRESSION T_AND EQUALITY_EXPRESSION								{ $$ = new Operator($1, "-", $3); }
 	;
 
 EXCLUSIVE_OR_EXPRESSION
 	: AND_EXPRESSION														{ $$ = $1; }
-	| EXCLUSIVE_OR_EXPRESSION T_XOR AND_EXPRESSION							//binary operator x ^ y
+	| EXCLUSIVE_OR_EXPRESSION T_XOR AND_EXPRESSION							{ $$ = new Operator($1, "-", $3); }
 	;
 
 INCLUSIVE_OR_EXPRESSION
 	: EXCLUSIVE_OR_EXPRESSION												{ $$ = $1; }
-	| INCLUSIVE_OR_EXPRESSION T_BOR EXCLUSIVE_OR_EXPRESSION					//binary operator or x | y
+	| INCLUSIVE_OR_EXPRESSION T_BOR EXCLUSIVE_OR_EXPRESSION					{ $$ = new Operator($1, "-", $3); }
 	;
 
 LOGICAL_AND_EXPRESSION
 	: INCLUSIVE_OR_EXPRESSION												{ $$ = $1; }
-	| LOGICAL_AND_EXPRESSION T_LOGAND INCLUSIVE_OR_EXPRESSION				//logical and x && y
+	| LOGICAL_AND_EXPRESSION T_LOGAND INCLUSIVE_OR_EXPRESSION				{ $$ = new LogicalOperator($1, ">=", $3); }
 	;
 
 LOGICAL_OR_EXPRESSION
 	: LOGICAL_AND_EXPRESSION												{ $$ = $1; }
-	| LOGICAL_OR_EXPRESSION T_LOGOR LOGICAL_AND_EXPRESSION					//logical or x || y
+	| LOGICAL_OR_EXPRESSION T_LOGOR LOGICAL_AND_EXPRESSION					{ $$ = new LogicalOperator($1, ">=", $3); }
 	;
 
 CONDITIONAL_EXPRESSION
@@ -199,17 +199,17 @@ CONDITIONAL_EXPRESSION
 
 ASSIGNMENT_EXPRESSION
 	: CONDITIONAL_EXPRESSION												{ $$ = $1; }
-	| UNARY_EXPRESSION T_ASSIGN ASSIGNMENT_EXPRESSION						{ $$ = new Operator($1, "=", $3); }//Assignment x = y , x+=y, x*=y ...
-	| UNARY_EXPRESSION T_MUL_ASSIGN ASSIGNMENT_EXPRESSION					{ $$ = new Operator($1, "*=", $3); }
-	| UNARY_EXPRESSION T_DIV_ASSIGN ASSIGNMENT_EXPRESSION					{ $$ = new Operator($1, "/=", $3); }
-	| UNARY_EXPRESSION T_MOD_ASSIGN ASSIGNMENT_EXPRESSION					{ $$ = new Operator($1, "%=", $3); }
-	| UNARY_EXPRESSION T_ADD_ASSIGN ASSIGNMENT_EXPRESSION					{ $$ = new Operator($1, "+=", $3); }
-	| UNARY_EXPRESSION T_SUB_ASSIGN ASSIGNMENT_EXPRESSION					{ $$ = new Operator($1, "-=", $3); }
-	| UNARY_EXPRESSION T_LEFT_ASSIGN ASSIGNMENT_EXPRESSION					{ $$ = new Operator($1, "<<=", $3); }
-	| UNARY_EXPRESSION T_RIGHT_ASSIGN ASSIGNMENT_EXPRESSION					{ $$ = new Operator($1, ">>=", $3); }
-	| UNARY_EXPRESSION T_AND_ASSIGN ASSIGNMENT_EXPRESSION					{ $$ = new Operator($1, "&=", $3); }
-	| UNARY_EXPRESSION T_XOR_ASSIGN ASSIGNMENT_EXPRESSION					{ $$ = new Operator($1, "^=", $3); }
-	| UNARY_EXPRESSION T_OR_ASSIGN ASSIGNMENT_EXPRESSION					{ $$ = new Operator($1, "|=", $3); }
+	| UNARY_EXPRESSION T_ASSIGN ASSIGNMENT_EXPRESSION						{ $$ = new AssignmentOperator($1, "=", $3); }//Assignment x = y , x+=y, x*=y ...
+	| UNARY_EXPRESSION T_MUL_ASSIGN ASSIGNMENT_EXPRESSION					{ $$ = new AssignmentOperator($1, "*=", $3); }
+	| UNARY_EXPRESSION T_DIV_ASSIGN ASSIGNMENT_EXPRESSION					{ $$ = new AssignmentOperator($1, "/=", $3); }
+	| UNARY_EXPRESSION T_MOD_ASSIGN ASSIGNMENT_EXPRESSION					{ $$ = new AssignmentOperator($1, "%=", $3); }
+	| UNARY_EXPRESSION T_ADD_ASSIGN ASSIGNMENT_EXPRESSION					{ $$ = new AssignmentOperator($1, "+=", $3); }
+	| UNARY_EXPRESSION T_SUB_ASSIGN ASSIGNMENT_EXPRESSION					{ $$ = new AssignmentOperator($1, "-=", $3); }
+	| UNARY_EXPRESSION T_LEFT_ASSIGN ASSIGNMENT_EXPRESSION					{ $$ = new AssignmentOperator($1, "<<=", $3); }
+	| UNARY_EXPRESSION T_RIGHT_ASSIGN ASSIGNMENT_EXPRESSION					{ $$ = new AssignmentOperator($1, ">>=", $3); }
+	| UNARY_EXPRESSION T_AND_ASSIGN ASSIGNMENT_EXPRESSION					{ $$ = new AssignmentOperator($1, "&=", $3); }
+	| UNARY_EXPRESSION T_XOR_ASSIGN ASSIGNMENT_EXPRESSION					{ $$ = new AssignmentOperator($1, "^=", $3); }
+	| UNARY_EXPRESSION T_OR_ASSIGN ASSIGNMENT_EXPRESSION					{ $$ = new AssignmentOperator($1, "|=", $3); }
 	;
 
 EXPRESSION
@@ -240,7 +240,7 @@ INIT_DECLARATOR_LIST
 
 INIT_DECLARATOR
 	: DECLARATOR															{ $$ = $1; }
-	| DECLARATOR T_ASSIGN INITIALIZER										{ $$ = new Operator($1, "=", $3); }
+	| DECLARATOR T_ASSIGN INITIALIZER										{ $$ = new AssignmentOperator($1, "=", $3); }
 	;
 
 STORAGE_CLASS_SPECIFIER
@@ -462,7 +462,7 @@ EXTERNAL_DECLARATION
 	;
 
 FUNCTION_DEFINITION
-	: DECLARATION_SPECIFIERS DECLARATOR DECLARATION_LIST COMPOUND_STATEMENT
+	: DECLARATION_SPECIFIERS DECLARATOR DECLARATION_LIST COMPOUND_STATEMENT { $$ = new Function_Definition_Args($1, $2, $4, $3); }
 	| DECLARATION_SPECIFIERS DECLARATOR COMPOUND_STATEMENT 					{ $$ = new Function_Definition($1, $2, $3); }
 	| DECLARATOR DECLARATION_LIST COMPOUND_STATEMENT
 	| DECLARATOR COMPOUND_STATEMENT

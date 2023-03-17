@@ -1,4 +1,4 @@
-int f()
+int f(int x)
 {
-    return 10;
+    return x;
 }

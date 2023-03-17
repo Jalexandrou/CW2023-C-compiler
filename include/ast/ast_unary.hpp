@@ -38,9 +38,9 @@ public:
         dst << " )";
     }
 
-    void compile(std::ostream &dst, std::string destReg) const {
+    void compile(std::ostream &dst, std::string destReg, Context &context) const {
         std::string opcode = getOpcode();
-        expr->compile(dst, destReg);
+        expr->compile(dst, destReg, context);
         if(opcode == "-"){
             dst << "\tneg     " << destReg << ", " << destReg << "\n";
         }else if(opcode == "++"){

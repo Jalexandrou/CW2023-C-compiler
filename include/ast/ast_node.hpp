@@ -8,6 +8,12 @@
 
 #include <memory>
 
+struct Context{
+    int pointerOffset;
+    int stackSize;
+    std::map<std::string,double> bindings;
+};
+
 class Node;
 
 typedef const Node *NodePtr;
@@ -21,7 +27,7 @@ public:
     //! Tell a node to print itself to the given stream
     virtual void print(std::ostream &dst) const = 0;
 
-    virtual void compile(std::ostream &dst, std::string destReg) const = 0;
+    virtual void compile(std::ostream &dst, std::string destReg, Context &context) const = 0;
 
     virtual const std::string getId() const { throw std::runtime_error("Not implemented getId() here"); }
 

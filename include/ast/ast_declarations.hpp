@@ -29,7 +29,10 @@ public:
         dst<<" )";
     }
 
-    virtual void compile(std::ostream &dst, std::string destReg) const override {}
+    virtual void compile(std::ostream &dst, std::string destReg, Context &context) const {
+        Declaration_left->compile(dst, destReg, context);
+        Declaration_right->compile(dst, destReg, context);
+    }
 };
 
 class Declaration
@@ -59,7 +62,10 @@ public:
         dst<<"; )";
     }
 
-    virtual void compile(std::ostream &dst, std::string destReg) const override {}
+    virtual void compile(std::ostream &dst, std::string destReg, Context &context) const {
+        Declaration_Specifier->compile(dst, destReg, context);
+        Init_declarator_list->compile(dst, destReg, context);
+    }
 };
 
 #endif

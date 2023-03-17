@@ -15,7 +15,9 @@ public:
         dst<<getType();
     }
 
-    virtual void compile(std::ostream &dst, std::string destReg) const override {}
+    virtual void compile(std::ostream &dst, std::string destReg, Context &context) const {
+
+    }
 };
 
 class Int
