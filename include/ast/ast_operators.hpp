@@ -147,7 +147,7 @@ public:
     void compile(std::ostream &dst, std::string destReg, Context &context)const {
         std::string symbol = getOpcode();
         //context PointerOffset is reduced after an operation
-        right->compile(dst, "x6", context);
+        right->compile(dst, destReg, context);
 
         if (symbol == "="){
 
@@ -155,7 +155,7 @@ public:
             //check if x exists then overwrite using bindings or define new val
             if(context.bindings.count(left->getId())){
                 context.pointerOffset += 4;
-                dst << "\tsw      " << "x6" << ", " << context.bindings[left->getId()] << "(s0)" << std::endl;
+                dst << "\tsw      " << destReg << ", " << context.bindings[left->getId()] << "(s0)" << std::endl;
             }else{
                 context.pointerOffset += 4;
                 context.bindings[left->getId()] = context.pointerOffset;
