@@ -57,8 +57,6 @@ for DRIVER in custom_tests/*_driver.c; do
     fi
 
     spike pk "${OUT}" > "${LOG_PATH}.simulation.log"
-
-    echo -n "Function Evaluates > " && tail -1 "${LOG_PATH}.simulation.log" && echo ""
     if [ $? -eq 0 ]; then
         echo -e "\t> Pass"
         (( PASSING++ ))
@@ -67,6 +65,8 @@ for DRIVER in custom_tests/*_driver.c; do
     else
         fail_testcase "Fail: simulation did not exit with exit-code 0"
     fi
+    echo -n "       Function Evaluates > " && tail -1 "${LOG_PATH}.simulation.log" && echo ""
+
 done
 
 printf "\nPassing %d/%d tests\n" "${PASSING}" "${TOTAL}"

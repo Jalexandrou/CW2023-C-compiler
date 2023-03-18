@@ -254,16 +254,22 @@ public:
             dst << "\tandi    " << destReg << ", x5, 0xff\n";
 
         }else if (symbol == "<"){
-            throw std::runtime_error("This Logical Operator is not implemented");
+            dst << "\tslt     " << "x5, x5\n";
+            dst << "\tandi    " << destReg << ", x5, 0xff\n";
 
         }else if (symbol == ">"){
-            throw std::runtime_error("This Logical Operator is not implemented");
+            dst << "\tsgt     " << "x5, x5\n";
+            dst << "\tandi    " << destReg << ", x5, 0xff\n";
 
         }else if (symbol == "<="){
-            throw std::runtime_error("This Logical Operator is not implemented");
+            dst << "\tsgt     " << "x5, x5\n";
+            dst << "\txori    " << destReg << ", x5, 1\n";
+            dst << "\tandi    " << destReg << ", x5, 0xff\n";
 
         }else if (symbol == ">="){
-            throw std::runtime_error("This Logical Operator is not implemented");
+            dst << "\tslt     " << "x5, x5\n";
+            dst << "\txori    " << destReg << ", x5, 1\n";
+            dst << "\tandi    " << destReg << ", x5, 0xff\n";
 
         }else {
             throw std::runtime_error("This Logical Operator is not implemented");
