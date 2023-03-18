@@ -163,8 +163,8 @@ RELATIONAL_EXPRESSION
 
 EQUALITY_EXPRESSION
 	: RELATIONAL_EXPRESSION													{ $$ = $1; }
-	| EQUALITY_EXPRESSION T_EQUALS RELATIONAL_EXPRESSION					{ $$ = new LogicalOperator($1, ">=", $3); }//Logical Equals Node ==
-	| EQUALITY_EXPRESSION T_NOTEQUAL RELATIONAL_EXPRESSION					{ $$ = new LogicalOperator($1, ">=", $3); }//Logical Not Equals Node !=
+	| EQUALITY_EXPRESSION T_EQUALS RELATIONAL_EXPRESSION					{ $$ = new LogicalOperator($1, "==", $3); }//Logical Equals Node ==
+	| EQUALITY_EXPRESSION T_NOTEQUAL RELATIONAL_EXPRESSION					{ $$ = new LogicalOperator($1, "!=", $3); }//Logical Not Equals Node !=
 	;
 
 AND_EXPRESSION

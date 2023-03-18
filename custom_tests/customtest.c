@@ -1,5 +1,7 @@
 int f()
 {
     int x = 3;
-    return x += 5;
+    int y = 3;
+    (x += x);
+    return x;
 }
