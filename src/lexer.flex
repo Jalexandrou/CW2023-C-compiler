@@ -24,7 +24,7 @@ L               [a-zA-Z_]
 (\&)            { return T_AND; }
 (\!)            { return T_LOGNOT; }
 
-[=]             { return T_ASSIGN; }
+(=)             { return T_ASSIGN; }
 (\*=)           { return T_MUL_ASSIGN; }
 (\/=)           { return T_DIV_ASSIGN; }
 (\%=)           { return T_MOD_ASSIGN; }
@@ -41,6 +41,10 @@ L               [a-zA-Z_]
 (\|\|)          { return T_LOGOR; }
 (!=)            { return T_NOTEQUAL; }
 (==)            { return T_EQUALS; }
+(<=)            { return T_LESSEQUALS; }
+(>=)            { return T_GREATEREQUALS; }
+(<)             { return T_LESS; }
+(>)             { return T_GREATER; }
 
 [(]             { return T_LBRACKET; }
 [)]             { return T_RBRACKET; }

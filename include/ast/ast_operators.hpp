@@ -254,21 +254,21 @@ public:
             dst << "\tandi    " << destReg << ", x5, 0xff\n";
 
         }else if (symbol == "<"){
-            dst << "\tslt     " << "x5, x5\n";
+            dst << "\tslt     " << "x5, x5, x6\n";
             dst << "\tandi    " << destReg << ", x5, 0xff\n";
 
         }else if (symbol == ">"){
-            dst << "\tsgt     " << "x5, x5\n";
+            dst << "\tsgt     " << "x5, x5, x6\n";
             dst << "\tandi    " << destReg << ", x5, 0xff\n";
 
         }else if (symbol == "<="){
-            dst << "\tsgt     " << "x5, x5\n";
-            dst << "\txori    " << destReg << ", x5, 1\n";
+            dst << "\tsgt     " << "x5, x5, x6\n";
+            dst << "\txori    " << "x5, x5, 1\n";
             dst << "\tandi    " << destReg << ", x5, 0xff\n";
 
         }else if (symbol == ">="){
-            dst << "\tslt     " << "x5, x5\n";
-            dst << "\txori    " << destReg << ", x5, 1\n";
+            dst << "\tslt     " << "x5, x5, x6\n";
+            dst << "\txori    " << "x5, x5, 1\n";
             dst << "\tandi    " << destReg << ", x5, 0xff\n";
 
         }else {
