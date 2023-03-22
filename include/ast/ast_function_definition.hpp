@@ -243,4 +243,37 @@ public:
 
     }
 };
+
+class Function_Call
+    : public Node
+{
+private:
+    NodePtr Direct_Declarator;
+
+public:
+    Function_Call(const NodePtr Direct_Declarator)
+        : Direct_Declarator(Direct_Declarator)
+    {};
+
+    virtual ~Function_Call()
+    {
+        delete Direct_Declarator;
+    }
+
+    virtual void print(std::ostream &dst) const override
+    {
+
+    }
+
+    const std::string getId() const override {
+        return Direct_Declarator->getId();
+    }
+
+    virtual void compile(std::ostream &dst, std::string destReg, Context &context) const {
+        dst << "\tcall    " << getId() << std::endl;
+        dst << "\tmv      " << destReg << ", a0" << std::endl;
+        dst << "\tsw      " << destReg <<", " << context.pointerOffset << "(s0)" << std::endl;
+        context.changeOffset(-4);
+    }
+};
 #endif

@@ -103,7 +103,7 @@ PRIMARY_EXPRESSION
 POSTFIX_EXPRESSION
 	: PRIMARY_EXPRESSION													{ $$ = $1; } //misc
 	| POSTFIX_EXPRESSION T_LSQRBRACKET EXPRESSION T_RSQRBRACKET				//indexing x[y]
-	| POSTFIX_EXPRESSION T_LBRACKET T_RBRACKET 								{ $$ = $1; } //function call x()
+	| POSTFIX_EXPRESSION T_LBRACKET T_RBRACKET 								{ $$ = new Function_Call($1); } //function call x()
 	| POSTFIX_EXPRESSION T_LBRACKET ARGUMENT_EXPRESSION_LIST T_RBRACKET		//function call with params??
 	| POSTFIX_EXPRESSION T_DOT T_IDENTIFIER									//fetching struct value
 	| POSTFIX_EXPRESSION T_PTR T_IDENTIFIER									//fetching pointer value
