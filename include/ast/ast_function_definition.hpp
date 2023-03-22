@@ -213,8 +213,16 @@ public:
     }
 
     virtual void compile(std::ostream &dst, std::string destReg, Context &context) const {
+        //copy the current scope into a new vector element
+        std::map<std::string, double> copy = context.bindings_list.back();
+        context.bindings_list.push_back(copy);
+
+        //compile the current compound statement
         Declaration_list->compile(dst, destReg, context);
         Statement_list->compile(dst, destReg, context);
+
+        //pop off the last scope of the vector once we leave this current scope
+        context.bindings_list.pop_back();
     }
 };
 

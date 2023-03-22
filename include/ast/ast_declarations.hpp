@@ -63,8 +63,15 @@ public:
     }
 
     virtual void compile(std::ostream &dst, std::string destReg, Context &context) const {
+
+        //Check if variable already exists, if it does erase it (for scopes)
+        if(context.bindings_list.back().count(Init_declarator_list->getId())){
+            context.bindings_list.back().erase(Init_declarator_list->getId());
+        }
+
         Declaration_Specifier->compile(dst, destReg, context);
         Init_declarator_list->compile(dst, destReg, context);
+
     }
 };
 

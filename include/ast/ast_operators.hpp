@@ -126,6 +126,11 @@ public:
         dst<<" )";
     }
 
+    //Gets ID of variable on left of assignment
+    const std::string getId()const override{
+        return left->getId();
+    }
+
     void compile(std::ostream &dst, std::string destReg, Context &context)const {
         std::string symbol = getOpcode();
         //context PointerOffset is reduced after an operation
