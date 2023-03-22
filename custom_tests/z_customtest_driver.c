@@ -2,11 +2,6 @@
 
 int f();
 
-int g(){
-    return 5;
-}
-
-
 int main()
 {
     printf("%d", f());

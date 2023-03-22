@@ -235,7 +235,7 @@ DECLARATION_SPECIFIERS
 
 INIT_DECLARATOR_LIST
 	: INIT_DECLARATOR														{ $$ = $1; }
-	| INIT_DECLARATOR_LIST T_COMMA INIT_DECLARATOR							//concatenate declarators
+	| INIT_DECLARATOR_LIST T_COMMA INIT_DECLARATOR							{ $$ = new Init_Declarator_List($1, $3); }//concatenate declarators
 	;
 
 INIT_DECLARATOR

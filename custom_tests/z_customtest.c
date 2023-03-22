@@ -1,5 +1,6 @@
 int f()
 {
-   return g();
+    int x=3, y=5;
+    return y;
 }
 

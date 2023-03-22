@@ -64,6 +64,8 @@ public:
 
     virtual const std::string getId() const { throw std::runtime_error("Not implemented getId() here"); }
 
+    virtual std::vector<std::string> get_Id_List() const { throw std::runtime_error("Not implemented get_Id_List() here"); }
+
     //! Evaluate the tree using the given mapping of variables to numbers
     // Don't need but will keep for now
     virtual double evaluate(

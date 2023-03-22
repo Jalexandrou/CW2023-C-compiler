@@ -117,18 +117,19 @@ public:
 
     void print(std::ostream &dst) const
     {
-        dst<<"( ";
-        left->print(dst);
-        dst<<" ";
-        dst<<getOpcode();
-        dst<<" ";
-        right->print(dst);
-        dst<<" )";
+
     }
 
     //Gets ID of variable on left of assignment
     const std::string getId()const override{
         return left->getId();
+    }
+
+    std::vector<std::string> get_Id_List() const override
+    {
+        std::vector<std::string> newVector;
+        newVector.push_back(left->getId());
+        return newVector;
     }
 
     void compile(std::ostream &dst, std::string destReg, Context &context)const {

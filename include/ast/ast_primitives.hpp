@@ -17,6 +17,13 @@ public:
     const std::string getId() const override
     { return id; }
 
+    std::vector<std::string> get_Id_List() const override
+    {
+        std::vector<std::string> newVector;
+        newVector.push_back(id);
+        return newVector;
+    }
+
     void print(std::ostream &dst) const override
     {
         dst<<id;

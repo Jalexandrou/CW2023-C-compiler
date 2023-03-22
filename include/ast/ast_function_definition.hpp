@@ -205,11 +205,7 @@ public:
 
     virtual void print(std::ostream &dst) const override
     {
-        dst<<"( ";
-        Declaration_list->print(dst);
-        dst<<" ";
-        Statement_list->print(dst);
-        dst<<" )";
+
     }
 
     virtual void compile(std::ostream &dst, std::string destReg, Context &context) const {

@@ -35,6 +35,47 @@ public:
     }
 };
 
+class Init_Declarator_List
+    : public Node
+{
+private:
+    NodePtr Declarator;
+    NodePtr Declarator_List;
+
+public:
+    Init_Declarator_List(const NodePtr _Declarator, const NodePtr _Declarator_List)
+        : Declarator(_Declarator), Declarator_List(_Declarator_List)
+    {};
+
+    virtual ~Init_Declarator_List()
+    {
+        delete Declarator;
+        delete Declarator_List;
+    }
+
+    virtual void print(std::ostream &dst) const override
+    {
+
+    }
+
+    std::vector<std::string> get_Id_List() const override {
+
+        //recursively add to a vector each id within a given declarator list
+        std::vector<std::string> Id_List = Declarator_List->get_Id_List();
+        std::string Declarator_Id = Declarator->getId();
+        Id_List.push_back(Declarator_Id);
+        return Id_List;
+
+    }
+
+    virtual void compile(std::ostream &dst, std::string destReg, Context &context) const {
+
+        Declarator_List->compile(dst, destReg, context);
+        Declarator->compile(dst, destReg, context);
+
+    }
+};
+
 class Declaration
     : public Node
 {
@@ -55,20 +96,20 @@ public:
 
     virtual void print(std::ostream &dst) const override
     {
-        dst<<"( ";
-        Declaration_Specifier->print(dst);
-        dst<<" ";
-        Init_declarator_list->print(dst);
-        dst<<"; )";
+
     }
 
     virtual void compile(std::ostream &dst, std::string destReg, Context &context) const {
 
-        //Check if variable already exists, if it does erase it (for scopes)
-        if(context.bindings_list.back().count(Init_declarator_list->getId())){
-            context.bindings_list.back().erase(Init_declarator_list->getId());
+        std::vector<std::string> Id_List = Init_declarator_list->get_Id_List();
+
+        for( int i=0; i< Id_List.size(); i++){
+            if(context.bindings_list.back().count(Id_List[i])){
+                context.bindings_list.back().erase(Id_List[i]);
+            }
         }
 
+        // //Check if variable already exists, if it does erase it (for scopes)
         Declaration_Specifier->compile(dst, destReg, context);
         Init_declarator_list->compile(dst, destReg, context);
 
