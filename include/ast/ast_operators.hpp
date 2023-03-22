@@ -53,28 +53,28 @@ public:
         right->compile(dst, "x6", context);
 
         context.pointerOffset += 4; //As we are loading values change offset
-        dst << "\tlw      " << "x5, " << context.pointerOffset << "(s0)" << std::endl;
-        context.pointerOffset += 4; //As we are loading values change offset
         dst << "\tlw      " << "x6, " << context.pointerOffset << "(s0)" << std::endl;
+        context.pointerOffset += 4; //As we are loading values change offset
+        dst << "\tlw      " << "x5, " << context.pointerOffset << "(s0)" << std::endl;
 
         if(symbol == "*"){
-            dst << "\tmul     " << destReg << ", x6, x5\n";
+            dst << "\tmul     " << destReg << ", x5, x6\n";
 
         }else if (symbol == "/"){
 
-            dst << "\tdiv     " << destReg << ", x6, x5\n";
+            dst << "\tdiv     " << destReg << ", x5, x6\n";
 
         }else if (symbol == "%"){
 
-            dst << "\trem     " << destReg << ", x6, x5\n";
+            dst << "\trem     " << destReg << ", x5, x6\n";
 
         }else if (symbol == "+"){
 
-            dst << "\tadd     " << destReg << ", x6, x5\n";
+            dst << "\tadd     " << destReg << ", x5, x6\n";
 
         }else if (symbol == "-"){
 
-            dst << "\tsub     " << destReg << ", x6, x5\n";
+            dst << "\tsub     " << destReg << ", x5, x6\n";
 
         }else{
             throw std::runtime_error("Operator not implemented");
@@ -236,9 +236,9 @@ public:
         right->compile(dst, "x6", context);
 
         context.pointerOffset += 4; //As we are loading values change offset
-        dst << "\tlw      " << "x5, " << context.pointerOffset << "(s0)" << std::endl;
-        context.pointerOffset += 4;
         dst << "\tlw      " << "x6, " << context.pointerOffset << "(s0)" << std::endl;
+        context.pointerOffset += 4;
+        dst << "\tlw      " << "x5, " << context.pointerOffset << "(s0)" << std::endl;
 
         if (symbol == "=="){
 

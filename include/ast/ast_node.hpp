@@ -8,9 +8,16 @@
 
 #include <memory>
 
+static int makeNameUnq=0;
+
+static std::string makeName(std::string base)
+{
+    return "_"+base+"_"+std::to_string(makeNameUnq++);
+}
 struct Context{
     int pointerOffset;
     int stackSize;
+    std::string Function_End_Label;
     std::map<std::string,double> bindings;
 };
 

@@ -35,6 +35,17 @@ public:
 
     virtual void compile(std::ostream &dst, std::string destReg, Context &context) const {
 
+        arg->compile(dst, "x5", context);
+        std::string falseLabel = makeName("False");
+
+        context.pointerOffset += 4; //As we are loading values change offset
+        dst << "\tlw      " << "x5, " << context.pointerOffset << "(s0)" << std::endl;
+
+        dst << "\tbeq     " << "x5, " << "x0, " <<  falseLabel << std::endl;
+
+        compoundStatement->compile(dst, destReg, context);
+
+        dst << falseLabel << ":" << std::endl;
     }
 };
 
@@ -77,6 +88,29 @@ public:
 
     virtual void compile(std::ostream &dst, std::string destReg, Context &context) const {
 
+        arg->compile(dst, "x5", context);
+        std::string falseLabel = makeName("False");
+        std::string endLabel = makeName("If_End");
+
+        context.pointerOffset += 4; //As we are loading values change offset
+        dst << "\tlw      " << "x5, " << context.pointerOffset << "(s0)" << std::endl;
+
+        dst << "\tbeq     " << "x5, " << "x0, " <<  falseLabel << std::endl;
+
+        //Compile the true section
+        compoundStatement->compile(dst, destReg, context);
+
+        //add a jump to "skip" the false section
+        dst << "\tj       " << endLabel <<std::endl;
+
+        //add a label for the jump section
+        dst << falseLabel << ":" << std::endl;
+
+        //compile the else section
+        elseCompoundStatement->compile(dst, destReg, context);
+
+        //Add a label for the end to allow to jump to if true is finished
+        dst <<endLabel << ":" << std::endl;
     }
 };
 
@@ -113,6 +147,23 @@ public:
     }
 
     virtual void compile(std::ostream &dst, std::string destReg, Context &context) const {
+        std::string startLabel = makeName("While_Start");
+        std::string endLabel = makeName("While_End");
+
+
+        dst << startLabel << ":" << std::endl;
+
+        arg->compile(dst, "x5", context);
+
+        context.pointerOffset += 4; //As we are loading values change offset
+        dst << "\tlw      " << "x5, " << context.pointerOffset << "(s0)" << std::endl;
+        dst << "\tbeq     " << "x5, " << "x0, " << endLabel << std::endl;
+
+        compoundStatement->compile(dst, destReg, context);
+
+        dst << "\tj       " << startLabel <<std::endl;
+
+        dst << endLabel << ":" << std::endl;
 
     }
 };

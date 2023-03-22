@@ -71,7 +71,10 @@ public:
     virtual void compile(std::ostream &dst, std::string destReg, Context &context) const override {
         std::string statement = getStatement();
         if (statement == "return"){
+            //compile the expression after return
             expr->compile(dst, destReg, context);
+            //Jump to end of function
+            dst << "\tj       " << context.Function_End_Label <<std::endl;
         }
     }
 };
