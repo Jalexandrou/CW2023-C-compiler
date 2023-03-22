@@ -126,14 +126,7 @@ public:
 
     void print(std::ostream &dst) const override
     {
-        dst<<"( ";
-        Type->print(dst);
-        dst<<" ";
-        Declarator->print(dst);
-        dst<<"()";
-        dst<<" { ";
-        Compound_Statement->print(dst);
-        dst<<" } )";
+
     }
 
     void compile(std::ostream &dst, std::string destReg, Context &context) const {
@@ -149,7 +142,6 @@ public:
 
         //Set the function end label within the current context to the end of the current function
         context.Function_End_Label = Function_End_Label;
-
 
         //Compile the code into the temp string stream
         Compound_Statement->compile(temp, destReg, context);
@@ -272,4 +264,37 @@ public:
         context.changeOffset(-4);
     }
 };
+
+class Translation_Unit
+    : public Node
+{
+private:
+    NodePtr translation_unit;
+    NodePtr external_declaration;
+
+public:
+    Translation_Unit(const NodePtr _translation_unit, const NodePtr _external_declaration)
+        : translation_unit(_translation_unit), external_declaration(_external_declaration)
+    {};
+
+    virtual ~Translation_Unit()
+    {
+        delete translation_unit;
+        delete external_declaration;
+    }
+
+
+    virtual void print(std::ostream &dst) const override
+    {
+
+    }
+
+
+    virtual void compile(std::ostream &dst, std::string destReg, Context &context) const {
+        external_declaration->compile(dst, destReg, context);
+        translation_unit->compile(dst, destReg, context);
+    }
+};
+
+
 #endif
