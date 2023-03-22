@@ -5,6 +5,7 @@
 #include <iostream>
 #include <map>
 #include <sstream>
+#include <vector>
 
 #include <memory>
 
@@ -14,11 +15,35 @@ static std::string makeName(std::string base)
 {
     return "_"+base+"_"+std::to_string(makeNameUnq++);
 }
-struct Context{
-    int pointerOffset;
-    int stackSize;
-    std::string Function_End_Label;
-    std::map<std::string,double> bindings;
+class Context{
+    public:
+        int pointerOffset;
+        int stackSize;
+        std::string Function_End_Label;
+        std::vector<std::map<std::string,double>> bindings_list;
+
+        Context(){
+            //initalise each value
+            pointerOffset = 0;
+            stackSize = 0;
+            Function_End_Label = "";
+            //Add an empty map to the vector
+            std::map<std::string, double> current_map;
+            bindings_list.push_back(current_map);
+        }
+
+        void changeOffset(int change){
+            pointerOffset += change;
+            if(pointerOffset > stackSize){
+                stackSize = pointerOffset;
+            }
+        }
+
+        int getStackSize(){
+            int temp = stackSize;
+            stackSize = 0;
+            return temp;
+        }
 };
 
 class Node;

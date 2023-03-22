@@ -38,7 +38,7 @@ public:
         arg->compile(dst, "x5", context);
         std::string falseLabel = makeName("False");
 
-        context.pointerOffset += 4; //As we are loading values change offset
+        context.changeOffset(4); //As we are loading values change offset
         dst << "\tlw      " << "x5, " << context.pointerOffset << "(s0)" << std::endl;
 
         dst << "\tbeq     " << "x5, " << "x0, " <<  falseLabel << std::endl;
@@ -92,7 +92,7 @@ public:
         std::string falseLabel = makeName("False");
         std::string endLabel = makeName("If_End");
 
-        context.pointerOffset += 4; //As we are loading values change offset
+        context.changeOffset(4); //As we are loading values change offset
         dst << "\tlw      " << "x5, " << context.pointerOffset << "(s0)" << std::endl;
 
         dst << "\tbeq     " << "x5, " << "x0, " <<  falseLabel << std::endl;
@@ -155,7 +155,7 @@ public:
 
         arg->compile(dst, "x5", context);
 
-        context.pointerOffset += 4; //As we are loading values change offset
+        context.changeOffset(4); //As we are loading values change offset
         dst << "\tlw      " << "x5, " << context.pointerOffset << "(s0)" << std::endl;
         dst << "\tbeq     " << "x5, " << "x0, " << endLabel << std::endl;
 

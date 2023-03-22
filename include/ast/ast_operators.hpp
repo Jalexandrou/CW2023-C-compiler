@@ -52,9 +52,9 @@ public:
         left->compile(dst, "x5", context);
         right->compile(dst, "x6", context);
 
-        context.pointerOffset += 4; //As we are loading values change offset
+        context.changeOffset(4); //As we are loading values change offset
         dst << "\tlw      " << "x6, " << context.pointerOffset << "(s0)" << std::endl;
-        context.pointerOffset += 4; //As we are loading values change offset
+        context.changeOffset(4); //As we are loading values change offset
         dst << "\tlw      " << "x5, " << context.pointerOffset << "(s0)" << std::endl;
 
         if(symbol == "*"){
@@ -81,7 +81,7 @@ public:
         }
 
         dst << "\tsw      " << destReg << ", " << context.pointerOffset << "(s0)" << std::endl;
-        context.pointerOffset -= 4; //As we are loading values change offset
+        context.changeOffset(-4); //As we are loading values change offset
     }
 };
 
@@ -131,15 +131,15 @@ public:
         //context PointerOffset is reduced after an operation
         right->compile(dst, destReg, context);
 
-        if(context.bindings.count(left->getId())){
+        if(context.bindings_list.back().count(left->getId())){
 
             if (symbol == "="){
-                context.pointerOffset += 4;
-                dst << "\tsw      " << destReg << ", " << context.bindings[left->getId()] << "(s0)" << std::endl;
+                context.changeOffset(4);
+                dst << "\tsw      " << destReg << ", " << context.bindings_list.back()[left->getId()] << "(s0)" << std::endl;
             }else{
 
-                dst << "\tlw      " << "x6" << ", " << context.bindings[left->getId()] << "(s0)" << std::endl;
-                context.pointerOffset += 4; //As we are loading values change offset
+                dst << "\tlw      " << "x6" << ", " << context.bindings_list.back()[left->getId()] << "(s0)" << std::endl;
+                context.changeOffset(4); //As we are loading values change offset
                 dst << "\tlw      " << "x5, " << context.pointerOffset << "(s0)" << std::endl;
 
                 if(symbol == "*="){
@@ -175,15 +175,15 @@ public:
                     throw std::runtime_error("This Assignment is not implemented");
                 }
 
-                dst << "\tsw      " << destReg << ", " << context.bindings[left->getId()] << "(s0)" << std::endl;
+                dst << "\tsw      " << destReg << ", " << context.bindings_list.back()[left->getId()] << "(s0)" << std::endl;
                 dst << "\tsw      " << destReg << ", " << context.pointerOffset << "(s0)" << std::endl;
-                context.pointerOffset -= 4;
+                context.changeOffset(-4);
             }
 
         }else{
-            context.pointerOffset += 4;
-            context.bindings[left->getId()] = context.pointerOffset;
-            context.pointerOffset -= 4;
+            context.changeOffset(4);
+            context.bindings_list.back()[left->getId()] = context.pointerOffset;
+            context.changeOffset(-4);
         }
     }
 };
@@ -235,9 +235,9 @@ public:
         left->compile(dst, "x5", context);
         right->compile(dst, "x6", context);
 
-        context.pointerOffset += 4; //As we are loading values change offset
+        context.changeOffset(4); //As we are loading values change offset
         dst << "\tlw      " << "x6, " << context.pointerOffset << "(s0)" << std::endl;
-        context.pointerOffset += 4;
+        context.changeOffset(4);
         dst << "\tlw      " << "x5, " << context.pointerOffset << "(s0)" << std::endl;
 
         if (symbol == "=="){
@@ -276,7 +276,7 @@ public:
         }
 
         dst << "\tsw      " << destReg << ", " << context.pointerOffset << "(s0)" << std::endl;
-        context.pointerOffset -= 4; //As we are loading values change offset
+        context.changeOffset(-4); //As we are loading values change offset
     }
 };
 
