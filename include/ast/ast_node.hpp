@@ -22,9 +22,10 @@ class Context{
         std::string Function_End_Label;
         std::vector<std::map<std::string,double>> bindings_list;
 
+
         Context(){
             //initalise each value
-            pointerOffset = 0;
+            pointerOffset = -8;
             stackSize = 0;
             Function_End_Label = "";
             //Add an empty map to the vector
@@ -34,7 +35,7 @@ class Context{
 
         void changeOffset(int change){
             pointerOffset += change;
-            if(pointerOffset > stackSize){
+            if(pointerOffset < stackSize){
                 stackSize = pointerOffset;
             }
         }

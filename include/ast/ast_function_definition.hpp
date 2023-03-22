@@ -51,26 +51,39 @@ public:
 
 
         std::string Function_End_Label = makeName("Function_End");
+
         std::stringstream temp;
 
+        //Set the function end label within the current context to the end of the current function
         context.Function_End_Label = Function_End_Label;
 
+
+        //Compile the code into the temp string stream
         Compound_Statement->compile(temp, destReg, context);
 
-        //Set stack size, should be equal to max PointerOffset + StackBuffer
-        dst << "\taddi    sp,  sp, -32\n";
-        // dst << "\tsw      ra,  28(sp)\n";
-        dst << "\tsw      s0,  24(sp)\n";
-        dst << "\taddi    s0,  sp, 32\n";
+        //Get the current minimum needed stack size for the function
+        //This is a negative number so make it positive
+        int currentStackSize = -context.getStackSize() + 4;
 
+        //Set stack size, should be equal to max PointerOffset + StackBuffer
+        dst << "\taddi    sp,  sp, " << -currentStackSize << std::endl;
+
+        //Store return address one below the end of the current stack
+        dst << "\tsw      ra,  " << currentStackSize - 4 << "(sp)\n";
+        //Store the Frame pointer into an address 2 below the bottom of the stack
+        dst << "\tsw      s0,  " << currentStackSize - 8 << "(sp)\n";
+        //Set the Frame pointer to the top of the last stack
+        dst << "\taddi    s0,  sp, " << currentStackSize << std::endl;
+
+        //print the string stream into the main output
         dst << temp.str();
 
-
+        //Add an end label to jump to in case of return
         dst << Function_End_Label << ":" << std::endl;
 
-        // dst << "\tlw      ra,  28(sp)\n";
-        dst << "\tlw      s0,  24(sp)\n";
-        dst << "\taddi    sp,  sp, 32\n";
+        dst << "\tlw      ra,  " << currentStackSize - 4 << "(sp)\n";
+        dst << "\tlw      s0,  " << currentStackSize - 8 << "(sp)\n";
+        dst << "\taddi    sp,  sp, " << currentStackSize << std::endl;
         dst << "\tjr      ra\n";
 
     }
@@ -141,11 +154,19 @@ public:
         //Compile the code into the temp string stream
         Compound_Statement->compile(temp, destReg, context);
 
+        //Get the current minimum needed stack size for the function
+        //This is a negative number so make it positive
+        int currentStackSize = -context.getStackSize() + 4;
+
         //Set stack size, should be equal to max PointerOffset + StackBuffer
-        dst << "\taddi    sp,  sp, -32\n";
-        // dst << "\tsw      ra,  28(sp)\n";
-        dst << "\tsw      s0,  24(sp)\n";
-        dst << "\taddi    s0,  sp, 32\n";
+        dst << "\taddi    sp,  sp, " << -currentStackSize << std::endl;
+
+        //Store return address one below the end of the current stack
+        dst << "\tsw      ra,  " << currentStackSize - 4 << "(sp)\n";
+        //Store the Frame pointer into an address 2 below the bottom of the stack
+        dst << "\tsw      s0,  " << currentStackSize - 8 << "(sp)\n";
+        //Set the Frame pointer to the top of the last stack
+        dst << "\taddi    s0,  sp, " << currentStackSize << std::endl;
 
         //compile the args into the normal dst
         Args->compile(dst, destReg, context);
@@ -156,9 +177,9 @@ public:
         //Add an end label to jump to in case of return
         dst << Function_End_Label << ":" << std::endl;
 
-        // dst << "\tlw      ra,  28(sp)\n";
-        dst << "\tlw      s0,  24(sp)\n";
-        dst << "\taddi    sp,  sp, 32\n";
+        dst << "\tlw      ra,  " << currentStackSize - 8 << "(sp)\n";
+        dst << "\tlw      s0,  " << currentStackSize - 4 << "(sp)\n";
+        dst << "\taddi    sp,  sp, " << currentStackSize << std::endl;
         dst << "\tjr      ra\n";
 
     }

@@ -10,7 +10,7 @@
 void compile(std::ostream &w)
 {
     Context context;
-    context.pointerOffset = -4; //Pointer Offset Value
+    context.changeOffset(-4); //Pointer Offset Value
 
     w << ".text" << std::endl;
     // w << ".globl f" << std::endl;
