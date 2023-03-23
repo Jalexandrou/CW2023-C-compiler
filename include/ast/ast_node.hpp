@@ -21,13 +21,15 @@ class Context{
         int stackSize;
         std::string Function_End_Label;
         std::vector<std::map<std::string,double>> bindings_list;
-
+        std::map<int,std::string> param_map;
+        int param_num;
 
         Context(){
             //initalise each value
             pointerOffset = -8;
             stackSize = 0;
             Function_End_Label = "";
+            param_num = 0;
             //Add an empty map to the vector
             std::map<std::string, double> current_map;
             bindings_list.push_back(current_map);
@@ -44,6 +46,10 @@ class Context{
             int temp = stackSize;
             stackSize = 0;
             return temp;
+        }
+
+        void addParam(std::string id){
+            param_map[param_num++] = id;
         }
 };
 

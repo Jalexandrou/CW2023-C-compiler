@@ -37,8 +37,9 @@ public:
             context.changeOffset(-4);
         }else{
             //SHOULD NOT OCCOUR JUST ACTS AS A BACKUP
-            dst << "\tli      " << destReg << ", " << 0 << std::endl;
-            dst << "\tsw      " << destReg << ", " << context.pointerOffset << "(s0)" << std::endl;
+            //Initialise variable and put in map if does not exist
+            dst << "\tli      " << "x7" << ", " << 0 << std::endl;
+            dst << "\tsw      " << "x7" << ", " << context.pointerOffset << "(s0)" << std::endl;
             context.bindings_list.back()[getId()] = context.pointerOffset;
             context.changeOffset(-4);
         }

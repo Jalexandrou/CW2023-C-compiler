@@ -1,5 +1,5 @@
-int f(int x)
+int f(int x, int y)
 {
-    x = 5;
-    return x;
+    x = 7;
+    return x + y;
 }

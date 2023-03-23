@@ -328,7 +328,7 @@ DIRECT_DECLARATOR
 	| T_LBRACKET DECLARATOR T_RBRACKET										{ $$ = $2; }
 	| DIRECT_DECLARATOR T_LSQRBRACKET CONSTANT_EXPRESSION T_RSQRBRACKET		//array
 	| DIRECT_DECLARATOR T_LSQRBRACKET T_RSQRBRACKET							//array with unknown size?
-	| DIRECT_DECLARATOR T_LBRACKET PARAMETER_TYPE_LIST T_RBRACKET			//function call with params?
+	| DIRECT_DECLARATOR T_LBRACKET PARAMETER_TYPE_LIST T_RBRACKET			{ $$ = new Param_Declarator($1, $3); }//function declarator with params
 	| DIRECT_DECLARATOR T_LBRACKET IDENTIFIER_LIST T_RBRACKET				//function call with variable params?
 	| DIRECT_DECLARATOR T_LBRACKET T_RBRACKET 								{ $$ = new Null_Declarator($1); } //function call without params?
 	;
@@ -346,11 +346,11 @@ PARAMETER_TYPE_LIST
 
 PARAMETER_LIST
 	: PARAMETER_DECLARATION													{ $$ = $1; }
-	| PARAMETER_LIST T_COMMA PARAMETER_DECLARATION
+	| PARAMETER_LIST T_COMMA PARAMETER_DECLARATION                          { $$ = new Param_Declaration_list($1, $3); }
 	;
 
 PARAMETER_DECLARATION
-	: DECLARATION_SPECIFIERS DECLARATOR
+	: DECLARATION_SPECIFIERS DECLARATOR                                     { $$ = new Param_Declaration($1, $2); }
 	| DECLARATION_SPECIFIERS ABSTRACT_DECLARATOR
 	| DECLARATION_SPECIFIERS												{ $$ = $1; }
 	;

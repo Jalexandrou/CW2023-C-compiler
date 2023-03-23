@@ -116,4 +116,71 @@ public:
     }
 };
 
+class Param_Declaration
+    : public Node
+{
+private:
+    NodePtr Declaration_Specifier;
+    NodePtr Declarator;
+
+public:
+    Param_Declaration(const NodePtr _Declaration_Specifier, const NodePtr _Declarator)
+        : Declaration_Specifier(_Declaration_Specifier), Declarator(_Declarator)
+    {};
+
+    virtual ~Param_Declaration()
+    {
+        delete Declaration_Specifier;
+        delete Declarator;
+    }
+
+    virtual void print(std::ostream &dst) const override
+    {
+
+    }
+
+    virtual void compile(std::ostream &dst, std::string destReg, Context &context) const {
+
+        Declaration_Specifier->compile(dst, destReg, context);
+        Declarator->compile(dst, destReg, context);
+
+        // Add param to param_map in context
+        context.addParam(Declarator->getId());
+
+    }
+};
+
+class Param_Declaration_list
+    : public Node
+{
+private:
+    NodePtr Param_Declaration_left;
+    NodePtr Param_Declaration_right;
+
+public:
+    Param_Declaration_list(const NodePtr _Param_Declaration_left, const NodePtr _Param_Declaration_right)
+        : Param_Declaration_left(_Param_Declaration_left), Param_Declaration_right(_Param_Declaration_right)
+    {};
+
+    virtual ~Param_Declaration_list()
+    {
+        delete Param_Declaration_left;
+        delete Param_Declaration_right;
+    }
+
+    virtual void print(std::ostream &dst) const override
+    {
+        dst<<"( ";
+        Param_Declaration_left->print(dst);
+        dst<<" ";
+        Param_Declaration_right->print(dst);
+        dst<<" )";
+    }
+
+    virtual void compile(std::ostream &dst, std::string destReg, Context &context) const {
+        Param_Declaration_left->compile(dst, destReg, context);
+        Param_Declaration_right->compile(dst, destReg, context);
+    }
+};
+
 #endif

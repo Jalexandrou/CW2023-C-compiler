@@ -47,6 +47,10 @@ public:
 
         dst << ".globl " << Declarator->getId() << std::endl; //Add context checking temp
 
+        //copy the current scope into a new vector element
+        std::map<std::string, double> copy = context.bindings_list.back();
+        context.bindings_list.push_back(copy);
+
         dst << Declarator->getId() << ':' << std::endl;
 
 
@@ -57,7 +61,7 @@ public:
         //Set the function end label within the current context to the end of the current function
         context.Function_End_Label = Function_End_Label;
 
-
+        Declarator->compile(temp, destReg, context);
         //Compile the code into the temp string stream
         Compound_Statement->compile(temp, destReg, context);
 
@@ -86,6 +90,8 @@ public:
         dst << "\taddi    sp,  sp, " << currentStackSize << std::endl;
         dst << "\tjr      ra\n";
 
+        //pop off the last scope of the vector once we leave this current scope
+        context.bindings_list.pop_back();
     }
 };
 
@@ -206,6 +212,46 @@ public:
 
 };
 
+class Param_Declarator
+    : public Node
+{
+private:
+    NodePtr Direct_Declarator;
+    NodePtr Parameter_Type_List;
+
+public:
+    Param_Declarator(const NodePtr _Direct_Declarator, const NodePtr _Parameter_Type_List)
+        : Direct_Declarator(_Direct_Declarator), Parameter_Type_List(_Parameter_Type_List)
+    {};
+
+    virtual ~Param_Declarator()
+    {
+        delete Direct_Declarator;
+        delete Parameter_Type_List;
+    }
+
+    const std::string getId() const override
+    { return Direct_Declarator->getId(); }
+
+    virtual void print(std::ostream &dst) const override
+    {}
+
+    virtual void compile(std::ostream &dst, std::string destReg, Context &context) const {
+
+        //compiler param list, adding variables to scope
+        Parameter_Type_List->compile(dst, destReg, context);
+
+        //Store each param register value into the memory location of each param
+        for(int i = 0; i<context.param_num; i++){
+            dst << "\tsw      a" << i  << ", " << context.bindings_list.back()[context.param_map[i]] << "(s0)" << std::endl;
+        }
+
+        //reset param values in context ready for next function call
+        context.param_map.clear();
+        context.param_num = 0;
+    }
+};
+
 class Compound_Statement
     : public Node
 {
@@ -320,8 +366,8 @@ public:
 
 
     virtual void compile(std::ostream &dst, std::string destReg, Context &context) const {
-        external_declaration->compile(dst, destReg, context);
         translation_unit->compile(dst, destReg, context);
+        external_declaration->compile(dst, destReg, context);
     }
 };
 
