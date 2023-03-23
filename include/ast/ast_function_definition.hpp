@@ -95,95 +95,6 @@ public:
     }
 };
 
-
-// class Function_Definition_Args
-//     : public Node
-// {
-// private:
-//     NodePtr Type;
-//     NodePtr Declarator;
-//     NodePtr Compound_Statement;
-//     NodePtr Args;
-
-// public:
-//     Function_Definition_Args(NodePtr _Type, NodePtr _Declarator, NodePtr _Compound_Statement, NodePtr _Args)
-//         : Type(_Type), Declarator(_Declarator), Compound_Statement(_Compound_Statement), Args(_Args)
-//     {};
-
-//     virtual ~Function_Definition_Args()
-//     {
-//         delete Type;
-//         delete Declarator;
-//         delete Compound_Statement;
-//         delete Args;
-//     }
-
-//     NodePtr getType() const
-//     { return Type; }
-
-//     NodePtr getDeclarator() const
-//     { return Declarator; }
-
-//     NodePtr getCompound_Statement() const
-//     { return Compound_Statement; }
-
-//     NodePtr getArgs() const
-//     { return Args; }
-
-//     void print(std::ostream &dst) const override
-//     {
-
-//     }
-
-//     void compile(std::ostream &dst, std::string destReg, Context &context) const {
-
-//         dst << ".globl " << Declarator->getId() << std::endl; //Add context checking temp
-
-//         dst << Declarator->getId() << ':' << std::endl;
-
-
-//         std::string Function_End_Label = makeName("Function_End");
-
-//         std::stringstream temp;
-
-//         //Set the function end label within the current context to the end of the current function
-//         context.Function_End_Label = Function_End_Label;
-
-//         //Compile the code into the temp string stream
-//         Compound_Statement->compile(temp, destReg, context);
-
-//         //Get the current minimum needed stack size for the function
-//         //This is a negative number so make it positive
-//         int currentStackSize = -context.getStackSize() + 4;
-
-//         //Set stack size, should be equal to max PointerOffset + StackBuffer
-//         dst << "\taddi    sp,  sp, " << -currentStackSize << std::endl;
-
-//         //Store return address one below the end of the current stack
-//         dst << "\tsw      ra,  " << currentStackSize - 4 << "(sp)\n";
-//         //Store the Frame pointer into an address 2 below the bottom of the stack
-//         dst << "\tsw      s0,  " << currentStackSize - 8 << "(sp)\n";
-//         //Set the Frame pointer to the top of the last stack
-//         dst << "\taddi    s0,  sp, " << currentStackSize << std::endl;
-
-//         //compile the args into the normal dst
-//         Args->compile(dst, destReg, context);
-
-//         //print the string stream into the main output
-//         dst << temp.str();
-
-//         //Add an end label to jump to in case of return
-//         dst << Function_End_Label << ":" << std::endl;
-
-//         dst << "\tlw      ra,  " << currentStackSize - 8 << "(sp)\n";
-//         dst << "\tlw      s0,  " << currentStackSize - 4 << "(sp)\n";
-//         dst << "\taddi    sp,  sp, " << currentStackSize << std::endl;
-//         dst << "\tjr      ra\n";
-
-//     }
-// };
-
-
 class Null_Declarator
     : public Node
 {
@@ -205,6 +116,12 @@ public:
 
     virtual void print(std::ostream &dst) const override
     {}
+
+     std::vector<std::string> get_Id_List() const override
+    {
+        //Return empty vector so if called memory can be dealocated successfully
+        return {};
+    }
 
     virtual void compile(std::ostream &dst, std::string destReg, Context &context) const {
         //Do nothing
@@ -271,11 +188,9 @@ public:
     }
 
     virtual void print(std::ostream &dst) const override
-    {
+    {}
 
-    }
-
-    virtual void compile(std::ostream &dst, std::string destReg, Context &context) const {
+    virtual void compile(std::ostream &dst, std::string destReg, Context &context) const override{
         //copy the current scope into a new vector element
         std::map<std::string, double> copy = context.bindings_list.back();
         context.bindings_list.push_back(copy);
