@@ -1,11 +1,8 @@
-int f()
+int f(int x, int y)
 {
+    return x + y;
+}
 
-    int i;
-
-    for(i = 0; i<5;){
-        i++;
-    }
-
-    return i;
+int g(){
+    return f(5,3);
 }

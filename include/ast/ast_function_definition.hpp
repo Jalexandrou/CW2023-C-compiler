@@ -1,7 +1,20 @@
 #ifndef ast_function_definition_hpp
 #define ast_function_definition_hpp
 
-typedef const Identifier *IdenPtr;
+typedef std::vector<NodePtr> Arglist;
+typedef Arglist *ArglistPtr;
+
+inline ArglistPtr initArglist(NodePtr arg){
+    ArglistPtr arglist = new Arglist();
+    arglist->push_back(arg);
+    return arglist;
+}
+
+inline ArglistPtr ArglistAppend(ArglistPtr arglist, NodePtr arg){
+  arglist->push_back(arg);
+  return arglist;
+}
+
 class Function_Definition
     : public Node
 {
@@ -150,6 +163,12 @@ public:
     const std::string getId() const override
     { return Direct_Declarator->getId(); }
 
+    std::vector<std::string> get_Id_List() const override
+    {
+        //Return empty vector so if called memory can be dealocated successfully
+        return {};
+    }
+
     virtual void print(std::ostream &dst) const override
     {}
 
@@ -255,6 +274,43 @@ public:
     }
 };
 
+class Function_Call_Args
+    : public Node
+{
+private:
+    NodePtr Direct_Declarator;
+    Arglist arglist;
+
+public:
+    Function_Call_Args(const NodePtr _Direct_Declarator, const Arglist _arglist)
+        : Direct_Declarator(_Direct_Declarator), arglist(_arglist)
+    {};
+
+    virtual ~Function_Call_Args()
+    {
+        delete Direct_Declarator;
+    }
+
+    virtual void print(std::ostream &dst) const override
+    {}
+
+    const std::string getId() const override {
+        return Direct_Declarator->getId();
+    }
+
+    virtual void compile(std::ostream &dst, std::string destReg, Context &context) const {
+        for(int i = 0; i<arglist.size(); i++){
+            arglist[i]->compile(dst, "x7", context);
+            dst << "\tmv      " << "a" << i << ", " << "x7" << std::endl;
+        }
+
+        dst << "\tcall    " << getId() << std::endl;
+        dst << "\tmv      " << destReg << ", a0" << std::endl;
+        dst << "\tsw      " << destReg <<", " << context.pointerOffset << "(s0)" << std::endl;
+        context.changeOffset(-4);
+    }
+};
+
 class Translation_Unit
     : public Node
 {
@@ -283,62 +339,6 @@ public:
     virtual void compile(std::ostream &dst, std::string destReg, Context &context) const {
         translation_unit->compile(dst, destReg, context);
         external_declaration->compile(dst, destReg, context);
-    }
-};
-
-class Arguement
-    : public Node
-{
-private:
-    NodePtr expression;
-
-public:
-    Arguement(const NodePtr _expression)
-        : expression(_expression)
-    {};
-
-    virtual ~Arguement()
-    {
-        delete expression;
-    }
-
-    virtual void print(std::ostream &dst) const override
-    {
-
-    }
-
-    virtual void compile(std::ostream &dst, std::string destReg, Context &context) const {
-        expression->compile(dst, destReg, context);
-    }
-};
-
-class Arguement_List
-    : public Node
-{
-private:
-    NodePtr List;
-    NodePtr expression;
-
-public:
-    Arguement_List(const NodePtr _List, const NodePtr _expression)
-        : List(_List), expression(_expression)
-    {};
-
-    virtual ~Arguement_List()
-    {
-        delete List;
-        delete expression;
-    }
-
-    virtual void print(std::ostream &dst) const override
-    {
-
-    }
-
-
-    virtual void compile(std::ostream &dst, std::string destReg, Context &context) const {
-
-        expression->compile(dst, destReg, context);
     }
 };
 

@@ -1,6 +1,7 @@
 %code requires{
 
   #include "ast.hpp"
+  #include "ast/ast_function_definition.hpp"
 
   extern const Node *g_root; // A way of getting the AST out
 
@@ -19,6 +20,7 @@
   const Node *node;
   double number;
   std::string *string;
+  ArglistPtr Arglist;
 }
 
 //List of terminal tokens, given from lexer shown with a T
@@ -63,7 +65,8 @@
 //-------------------------MISC---------------------------
 %token T_ELLIPSIS //specifies unknown amount of params
 %token T_TYPEDEF //allows you to define your own type
-%token T_EXTERN //Set a type as being already assigned in another file
+%token T_EXTERN //Set
+ a type as being already assigned in another file
 %token T_STATIC
 %token T_AUTO
 %token T_REGISTER
@@ -71,7 +74,7 @@
 //Assignment of types for each token
 
 //-----------------------------------------Define AST nodes -------------------------------------
-%type <node> PRIMARY_EXPRESSION POSTFIX_EXPRESSION ARGUMENT_EXPRESSION_LIST UNARY_EXPRESSION
+%type <node> PRIMARY_EXPRESSION POSTFIX_EXPRESSION UNARY_EXPRESSION
 %type <node> CAST_EXPRESSION MULTIPLICATIVE_EXPRESSION ADDITIVE_EXPRESSION SHIFT_EXPRESSION RELATIONAL_EXPRESSION
 %type <node> EQUALITY_EXPRESSION AND_EXPRESSION EXCLUSIVE_OR_EXPRESSION INCLUSIVE_OR_EXPRESSION LOGICAL_AND_EXPRESSION
 %type <node> LOGICAL_OR_EXPRESSION CONDITIONAL_EXPRESSION ASSIGNMENT_EXPRESSION EXPRESSION
@@ -82,6 +85,8 @@
 %type <node> INITIALIZER INITIALIZER_LIST STATEMENT LABELED_STATEMENT COMPOUND_STATEMENT DECLARATION_LIST STATEMENT_LIST
 %type <node> EXPRESSION_STATEMENT SELECTION_STATEMENT ITERATION_STATEMENT JUMP_STATEMENT TRANSLATION_UNIT EXTERNAL_DECLARATION
 %type <node> FUNCTION_DEFINITION SPECIFIER_QUALIFIER_LIST STRUCT_DECLARATOR STRUCT_DECLARATOR_LIST
+
+%type <Arglist> ARGUMENT_EXPRESSION_LIST
 
 //give the terminal leaf node number the TYPE of number
 %type <number> T_NUMBER
@@ -104,7 +109,7 @@ POSTFIX_EXPRESSION
 	: PRIMARY_EXPRESSION													{ $$ = $1; } //misc
 	| POSTFIX_EXPRESSION T_LSQRBRACKET EXPRESSION T_RSQRBRACKET				//indexing x[y]
 	| POSTFIX_EXPRESSION T_LBRACKET T_RBRACKET 								{ $$ = new Function_Call($1); } //function call x()
-	| POSTFIX_EXPRESSION T_LBRACKET ARGUMENT_EXPRESSION_LIST T_RBRACKET		//function call with params??
+	| POSTFIX_EXPRESSION T_LBRACKET ARGUMENT_EXPRESSION_LIST T_RBRACKET		{ $$ = new Function_Call_Args($1, *$3); delete $3;  }//function call with params
 	| POSTFIX_EXPRESSION T_DOT T_IDENTIFIER									//fetching struct value
 	| POSTFIX_EXPRESSION T_PTR T_IDENTIFIER									//fetching pointer value
 	| POSTFIX_EXPRESSION T_INC												{ $$ = new Postfix_Expression($1, "++"); }
@@ -112,8 +117,8 @@ POSTFIX_EXPRESSION
 	;
 
 ARGUMENT_EXPRESSION_LIST
-	: ASSIGNMENT_EXPRESSION													{ $$ = $1; }
-	| ARGUMENT_EXPRESSION_LIST T_COMMA ASSIGNMENT_EXPRESSION				//list of assignments to be used as params
+	: ASSIGNMENT_EXPRESSION													{ $$ = initArglist($1); }
+	| ARGUMENT_EXPRESSION_LIST T_COMMA ASSIGNMENT_EXPRESSION				{ $$ = ArglistAppend($1, $3); }
 	;
 
 UNARY_EXPRESSION
