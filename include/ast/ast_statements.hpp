@@ -118,6 +118,28 @@ public:
 
 };
 
+class SizeOfNode: public Node
+{
+private:
 
+public:
+
+    SizeOfNode()
+    {}
+
+    ~SizeOfNode()
+    {}
+
+    void print(std::ostream &dst) const {
+
+    }
+
+    void compile(std::ostream &dst, std::string destReg, Context &context)const {
+        dst << "\tli       " << destReg << ", 4"<< std::endl;
+        dst << "\tsw       " << destReg << ", " << context.pointerOffset << "(s0)" << std::endl;
+        context.changeOffset(-4);
+    }
+
+};
 
 #endif

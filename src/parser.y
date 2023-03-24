@@ -131,8 +131,8 @@ UNARY_EXPRESSION
 	| T_MINUS CAST_EXPRESSION												{ $$ = new Unary($2, "-");  }
 	| T_BNOT CAST_EXPRESSION												{ $$ = new Unary($2, "~");  }
 	| T_LOGNOT CAST_EXPRESSION												{ $$ = new Unary($2, "!");  }
-	| T_SIZEOF UNARY_EXPRESSION												//Create SizeOf Function Node
-	| T_SIZEOF T_LBRACKET TYPE_NAME T_RBRACKET								//Create SizeOf Function Node
+	| T_SIZEOF UNARY_EXPRESSION												{ $$ = new SizeOfNode(); } //Create SizeOf Function Node
+	| T_SIZEOF T_LBRACKET TYPE_NAME T_RBRACKET								{ $$ = new SizeOfNode(); } //Create SizeOf Function Node
 	;
 
 CAST_EXPRESSION

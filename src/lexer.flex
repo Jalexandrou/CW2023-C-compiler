@@ -78,6 +78,8 @@ int             { return T_INT; }
 void            { return T_VOID; }
 unsigned        { return T_UNSIGNED; }
 
+sizeof          { return T_SIZEOF; }
+
 {L}({L}|{D})*   { yylval.string=new std::string(yytext); return T_IDENTIFIER; }
 {D}+([.]{D}*)? { yylval.number=strtod(yytext, 0); return T_NUMBER; }
 
