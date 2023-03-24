@@ -107,8 +107,8 @@ POSTFIX_EXPRESSION
 	| POSTFIX_EXPRESSION T_LBRACKET ARGUMENT_EXPRESSION_LIST T_RBRACKET		//function call with params??
 	| POSTFIX_EXPRESSION T_DOT T_IDENTIFIER									//fetching struct value
 	| POSTFIX_EXPRESSION T_PTR T_IDENTIFIER									//fetching pointer value
-	| POSTFIX_EXPRESSION T_INC												//post-increment node x++
-	| POSTFIX_EXPRESSION T_DEC												//post-decrement node x--
+	| POSTFIX_EXPRESSION T_INC												{ $$ = new Postfix_Expression($1, "++"); }
+	| POSTFIX_EXPRESSION T_DEC												{ $$ = new Postfix_Expression($1, "--"); }
 	;
 
 ARGUMENT_EXPRESSION_LIST

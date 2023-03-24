@@ -1,5 +1,5 @@
-int f(int x, int y, int z, int p, int q)
+int f()
 {
-    x = 7 + 3;
-    return  (x + y / z) * p + q;
+    int x = 3;
+    return x++;
 }
