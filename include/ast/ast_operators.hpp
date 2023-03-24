@@ -76,7 +76,22 @@ public:
 
             dst << "\tsub     " << destReg << ", x5, x6\n";
 
-        }else{
+        }else if (symbol == "&"){
+
+            dst << "\tand     " << destReg << ", x5, x6\n";
+
+        }
+        else if (symbol == "^"){
+
+            dst << "\txor     " << destReg << ", x5, x6\n";
+
+        }
+        else if (symbol == "|"){
+
+            dst << "\tor      " << destReg << ", x5, x6\n";
+
+        }
+        else{
             throw std::runtime_error("Operator not implemented");
         }
 
