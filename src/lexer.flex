@@ -46,6 +46,9 @@ L               [a-zA-Z_]
 (>=)            { return T_GREATEREQUALS; }
 (<)             { return T_LESS; }
 (>)             { return T_GREATER; }
+(<<)            { return T_LEFTSHIFT; }
+(>>)            { return T_RIGHTSHIFT; }
+
 
 [(]             { return T_LBRACKET; }
 [)]             { return T_RBRACKET; }

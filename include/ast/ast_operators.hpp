@@ -91,6 +91,16 @@ public:
             dst << "\tor      " << destReg << ", x5, x6\n";
 
         }
+        else if (symbol == "<<"){
+
+            dst << "\tsll     " << destReg << ", x5, x6\n";
+
+        }
+        else if (symbol == ">>"){
+
+            dst << "\tsra     " << destReg << ", x5, x6\n";
+
+        }
         else{
             throw std::runtime_error("Operator not implemented");
         }
