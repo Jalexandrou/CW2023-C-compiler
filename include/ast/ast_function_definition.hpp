@@ -286,5 +286,60 @@ public:
     }
 };
 
+class Arguement
+    : public Node
+{
+private:
+    NodePtr expression;
+
+public:
+    Arguement(const NodePtr _expression)
+        : expression(_expression)
+    {};
+
+    virtual ~Arguement()
+    {
+        delete expression;
+    }
+
+    virtual void print(std::ostream &dst) const override
+    {
+
+    }
+
+    virtual void compile(std::ostream &dst, std::string destReg, Context &context) const {
+        expression->compile(dst, destReg, context);
+    }
+};
+
+class Arguement_List
+    : public Node
+{
+private:
+    NodePtr List;
+    NodePtr expression;
+
+public:
+    Arguement_List(const NodePtr _List, const NodePtr _expression)
+        : List(_List), expression(_expression)
+    {};
+
+    virtual ~Arguement_List()
+    {
+        delete List;
+        delete expression;
+    }
+
+    virtual void print(std::ostream &dst) const override
+    {
+
+    }
+
+
+    virtual void compile(std::ostream &dst, std::string destReg, Context &context) const {
+
+        expression->compile(dst, destReg, context);
+    }
+};
 
 #endif
