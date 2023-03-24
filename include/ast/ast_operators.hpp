@@ -292,7 +292,36 @@ public:
             dst << "\txori    " << "x5, x5, 1\n";
             dst << "\tandi    " << destReg << ", x5, 0xff\n";
 
-        }else {
+        }
+        else if (symbol == "||"){
+            std::string L2 = makeName("LoadOne");
+            std::string L3 = makeName("LoadZero");
+            std::string L5 = makeName("Exit");
+
+            dst << "\tbne     " << "x5, zero, " << L2 << "\n";
+            dst << "\tbeq     " << "x6, zero, " << L3 << "\n";
+            dst << L2 << ":\n";
+            dst << "\tli      " << destReg << ", 1\n";
+            dst << "\tj       " << L5 << "\n";
+            dst << L3 << ":\n";
+            dst << "\tli      " << destReg << ", 0\n";
+            dst << L5 << ":\n";
+
+        }
+        else if (symbol == "&&"){
+            std::string L2 = makeName("LoadOne");
+            std::string L5 = makeName("Exit");
+
+            dst << "\tbeq     " << "x5, zero, " << L2 << "\n";
+            dst << "\tbeq     " << "x6, zero, " << L2 << "\n";
+            dst << "\tli      " << destReg << ", 1\n";
+            dst << "\tj       " << L5 << "\n";
+            dst << L2 << ":\n";
+            dst << "\tli      " << destReg << ", 0\n";
+            dst << L5 << ":\n";
+
+        }
+        else {
             throw std::runtime_error("This Logical Operator is not implemented");
         }
 

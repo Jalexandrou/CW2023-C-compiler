@@ -15,7 +15,7 @@ L               [a-zA-Z_]
 [\*]            { return T_STAR; }
 [%]             { return T_MOD; }
 [+]             { return T_PLUS; }
-[\^]            { return T_EXPONENT; }
+[\^]            { return T_XOR; }
 [\/]            { return T_DIVIDE; }
 [-]             { return T_MINUS; }
 (\~)            { return T_BNOT; }
@@ -23,6 +23,7 @@ L               [a-zA-Z_]
 (\-\-)          { return T_DEC; }
 (\&)            { return T_AND; }
 (\!)            { return T_LOGNOT; }
+(\|)            { return T_BOR; }
 
 (=)             { return T_ASSIGN; }
 (\*=)           { return T_MUL_ASSIGN; }
