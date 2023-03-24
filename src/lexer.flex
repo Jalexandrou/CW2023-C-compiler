@@ -61,6 +61,8 @@ return          { return T_RETURN; }
 continue        { return T_CONTINUE; }
 break           { return T_BREAK; }
 
+for             { return T_FOR; }
+
 log             { return T_LOG; }
 exp             { return T_EXP; }
 sqrt            { return T_SQRT; }

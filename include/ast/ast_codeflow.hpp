@@ -168,4 +168,106 @@ public:
     }
 };
 
+class For_Node
+    : public Node
+{
+private:
+    NodePtr Expression_Statement;
+    NodePtr Expression_Statement_2;
+    NodePtr Expression;
+    NodePtr Statement;
+
+public:
+    For_Node(const NodePtr _Expression_Statement, const NodePtr _Expression_Statement_2, const NodePtr _Expression, const NodePtr _Statement)
+        : Expression_Statement(_Expression_Statement), Expression_Statement_2(_Expression_Statement_2), Expression(_Expression), Statement(_Statement)
+    {}
+
+    virtual ~For_Node()
+    {
+        delete Expression_Statement;
+        delete Expression_Statement_2;
+        delete Expression;
+        delete Statement;
+    }
+
+    virtual void print(std::ostream &dst) const override
+    {
+
+    }
+
+    virtual void compile(std::ostream &dst, std::string destReg, Context &context) const {
+        std::string startLabel = makeName("For_Start");
+        std::string endLabel = makeName("For_End");
+
+        Expression_Statement->compile(dst, destReg, context);
+
+        dst << startLabel << ":" << std::endl;
+
+        Expression_Statement_2->compile(dst, destReg, context);
+
+        context.changeOffset(4); //As we are loading values change offset
+        dst << "\tlw      " << "x5, " << context.pointerOffset << "(s0)" << std::endl;
+        dst << "\tbeq     " << "x5, " << "x0, " << endLabel << std::endl;
+
+        if(Expression != NULL){
+            Expression->compile(dst, destReg, context);
+        }
+
+        Statement->compile(dst, destReg, context);
+
+        dst << "\tj       " << startLabel <<std::endl;
+
+        dst << endLabel << ":" << std::endl;
+
+    }
+};
+
+class For_Node_No_Exp
+    : public Node
+{
+private:
+    NodePtr arg;
+    NodePtr compoundStatement;
+
+public:
+    For_Node_No_Exp(const NodePtr _arg, const NodePtr _compoundStatement)
+        : arg(_arg), compoundStatement(_compoundStatement)
+    {}
+
+    virtual ~For_Node_No_Exp()
+    {
+        delete arg;
+        delete compoundStatement;
+    }
+
+    NodePtr getArg() const
+    { return arg; }
+
+    virtual void print(std::ostream &dst) const override
+    {
+
+    }
+
+    virtual void compile(std::ostream &dst, std::string destReg, Context &context) const {
+        std::string startLabel = makeName("While_Start");
+        std::string endLabel = makeName("While_End");
+
+
+        dst << startLabel << ":" << std::endl;
+
+        arg->compile(dst, "x5", context);
+
+        context.changeOffset(4); //As we are loading values change offset
+        dst << "\tlw      " << "x5, " << context.pointerOffset << "(s0)" << std::endl;
+        dst << "\tbeq     " << "x5, " << "x0, " << endLabel << std::endl;
+
+        compoundStatement->compile(dst, destReg, context);
+
+        dst << "\tj       " << startLabel <<std::endl;
+
+        dst << endLabel << ":" << std::endl;
+
+    }
+};
+
 #endif

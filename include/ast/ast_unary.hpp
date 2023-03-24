@@ -138,11 +138,13 @@ public:
         }else if(opcode == "+"){
             //Does this do anything?
         }else if(opcode == "~"){
+
             dst << "\tnot     " << "x5" << ", " << "x5" << "\n";
 
             dst << "\tsw      " << "x5" << ", " << context.pointerOffset << "(s0)" << std::endl;
             context.changeOffset(-4); //As we are loading values change offset
         }else if(opcode == "!"){
+
             dst << "\tseqz    " << "x5, x5\n";
             dst << "\tandi    " << "x5" << ", x5, 0xff\n";
 

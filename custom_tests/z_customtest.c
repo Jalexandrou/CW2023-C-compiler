@@ -1,5 +1,10 @@
 int f()
 {
-    int x = 3;
-    return x++;
+    int x;
+    int y;
+    y=0;
+    for(x=0; x<10; x=x+1){
+        y=y-1;
+    }
+    return y;
 }
