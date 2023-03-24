@@ -222,26 +222,23 @@ public:
     }
 };
 
-class For_Node_No_Exp
+class Switch_Node
     : public Node
 {
 private:
-    NodePtr arg;
-    NodePtr compoundStatement;
+    NodePtr Expression;
+    NodePtr Statement;
 
 public:
-    For_Node_No_Exp(const NodePtr _arg, const NodePtr _compoundStatement)
-        : arg(_arg), compoundStatement(_compoundStatement)
+    Switch_Node(const NodePtr _Expression, const NodePtr _Statement)
+        : Expression(_Expression), Statement(_Statement)
     {}
 
-    virtual ~For_Node_No_Exp()
+    virtual ~Switch_Node()
     {
-        delete arg;
-        delete compoundStatement;
+        delete Expression;
+        delete Statement;
     }
-
-    NodePtr getArg() const
-    { return arg; }
 
     virtual void print(std::ostream &dst) const override
     {
@@ -249,24 +246,48 @@ public:
     }
 
     virtual void compile(std::ostream &dst, std::string destReg, Context &context) const {
-        std::string startLabel = makeName("While_Start");
-        std::string endLabel = makeName("While_End");
+        Expression->compile(dst, destReg, context);
+        Statement->compile(dst, destReg, context);
+    }
+};
 
+class Case_Node
+    : public Node
+{
+private:
+    NodePtr Const_Expression;
+    NodePtr Statement;
 
-        dst << startLabel << ":" << std::endl;
+public:
+    Case_Node(const NodePtr _Const_Expression, const NodePtr _Statement)
+        : Const_Expression(_Const_Expression), Statement(_Statement)
+    {}
 
-        arg->compile(dst, "x5", context);
+    virtual ~Case_Node()
+    {
+        delete Const_Expression;
+        delete Statement;
+    }
+
+    virtual void print(std::ostream &dst) const override
+    {
+
+    }
+
+    virtual void compile(std::ostream &dst, std::string destReg, Context &context) const {
+        std::string case_jump = makeName("jump_case");
+        Const_Expression->compile(dst, "x6", context);
 
         context.changeOffset(4); //As we are loading values change offset
+        dst << "\tlw      " << "x6, " << context.pointerOffset << "(s0)" << std::endl;
+        context.changeOffset(4); //As we are loading values change offset
         dst << "\tlw      " << "x5, " << context.pointerOffset << "(s0)" << std::endl;
-        dst << "\tbeq     " << "x5, " << "x0, " << endLabel << std::endl;
 
-        compoundStatement->compile(dst, destReg, context);
+        dst << "\tbeq     " << "x5, x6, " << case_jump << std::endl;
 
-        dst << "\tj       " << startLabel <<std::endl;
+        Statement->compile(dst, destReg, context);
 
-        dst << endLabel << ":" << std::endl;
-
+        dst << case_jump << ":" << std::endl;
     }
 };
 

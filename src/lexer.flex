@@ -53,6 +53,7 @@ L               [a-zA-Z_]
 [}]             { return T_RCURBRACKET; }
 [;]             { return T_SEMICOLON; }
 [,]             { return T_COMMA;}
+[:]             { return T_COLON; }
 
 if              { return T_IF; }
 else            { return T_ELSE; }
@@ -60,6 +61,9 @@ while           { return T_WHILE; }
 return          { return T_RETURN; }
 continue        { return T_CONTINUE; }
 break           { return T_BREAK; }
+switch          { return T_SWITCH; }
+case            { return T_CASE;}
+
 
 for             { return T_FOR; }
 
